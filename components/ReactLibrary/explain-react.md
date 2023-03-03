@@ -42,7 +42,7 @@ yarn create vite
 // 请将 "xxx" 替换成项目名称.
 ```
 
-### 2.  React-Router-Dom
+### 2.  React Router Dom
 
 ​    <b>react-router-dom 是一款 React 的路由工具, 可以为 React 项目提供路由服务支持.</b> 
 
@@ -96,7 +96,7 @@ yarn add axios
 
 ​    <b>参考网站:</b> <b>[Axios 中文文档](https://www.axios-http.cn/)</b> 
 
-### 6. Redux-Devtools-Extension (Browser)
+### 6. Redux Devtools Extension (Browser)
 
 ​    <b>Redux-Devtools-Extension 是一款专注于 Redux 全局状态管理插件的调试工具, 该插件可以在 Edge 浏览器插件商城中进行下载, 属于浏览器插件, 经后期配置完毕后可以对 Redux 所管理的项目进行及时的语法检查, 并报出问题原因等...避免后期不必要的麻烦.</b> 
 
@@ -110,4 +110,16 @@ yarn add axios
 ## 2. 服务端插件
 
 ### 1. NodeJs
+
+​    <b>NodeJs 是一个基于Chrome V8引擎的JavaScript运行环境. </b> 
+
+### 2. Mongodb
+
+​    <b>Mongodb 是一个类属 NO SQL 的数据库. 是一个基于分布式文件存储的数据库. 旨在为WEB应用提供可扩展的高性能数据存储解决方案. 本项目种将使用该插件作为后端服务数据库</b> 
+
+### 3. Mongodb Compass
+
+​    <b>Mongodb Compass 是一个 Mongodb 数据库可视化软件.</b> 
+
+## 3. Mongodb 安装
 
