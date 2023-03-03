@@ -97,7 +97,7 @@ yarn create vite // 加载完成后输入项目名后需要自行选择创建的
 
 ​    <b>拓展 ID: `w88975.code-translate`</b> 
 
- ## Vue 基础
+ ## 3. Vue 基础
 
 ### 前言
 
@@ -243,7 +243,506 @@ app.mount('#app');
 
 <img src="./img/browserDemonstration.png" alt="data 函数的对象属性如何取值" />
 
-### B. v-bind 属性
+### B. v-bind 指令
 
-​    <b>V-bind 属性用于属性的绑定, 因为在模板中不能直接使用 <i style="color: orange; text-decoration: underline;">\<a href="{{ xxx }}"\>\</a\></i> 的形式去进行属性的设置, 只能通过 `v-bind` 属性对属性值进行双向的绑定.</b> 
+​    <b>V-bind 属性用于属性的绑定, 因为在模板中不能直接使用 <i style="color: orange; text-decoration: underline;">\<a href="{{ xxx }}"\>\</a\></i> 的形式去进行属性的设置, 只能通过 `v-bind` 指令对属性值进行双向的绑定.正确的方式则是: <i style="color: #67C23A; text-decoration: underline;">\<a v-bind:href="{{ xxx }}"\>\</a\></i> 或 <i style="color: #67C23A; text-decoration: underline;">\<a :href="{{ xxx }}"\>\</a\></i> 来进行数据绑定.</b> 
+
+​    <b style="font-style: italic;">※ 指令:  <u>是指 Vue 提供的一组可以在 HTML 模板中或是在 Vue 文件中可以直接使用的特殊属性. 如: v-bind、v-for、v-if 等. 用于实现数据绑定、循环数据、条件判断等...</u></b> 
+
+```vue
+<template>
+    <!-- 此处为 HTML 模板, 为了便利所以直接使用的 Vue 模块, 但是用方法不变! -->
+    <div id="app">
+        <a :href="link">百度首页</a>
+        <a v-bind:href="link">百度首页</a>
+    </div>
+</template>
+
+<script>
+// 此处只展示 Data 属性， 为了便利所以直接使用的 Vue 模块.
+export default {
+    name: 'App',
+    data() {
+        return {
+            link: 'https://www.baidu.com',
+        }
+    }
+}
+</script>
+
+```
+
+### C. v-for 指令
+
+​    <b>`v-for` 指令是将 data() 属性中的数据使用指定的 HTML 模板的方式将需要展示数据展开并遍历数据后放入到 HTML 模板中对应的位置并最终展示出来</b> 
+
+<img src="./img/showLists.png" />
+
+​     <b>一般来说要想将以上数据展示到 HTML 中需要使用以下 2 中最基础的方式:</b>
+
+<b>1. 从 HTML 中直接书写:</b> 
+
+```html
+<div id="app">
+    <h1>展示数据</h1>
+    <div class="show-data">
+        <div>数据 - 01</div>
+        <div>数据 - 02</div>
+        <div>数据 - 03</div>
+        <div>数据 - 04</div>
+        <div>数据 - 05</div>
+    </div>
+</div>
+```
+
+<b>2. 使用 js 面向 过程 或 对象 对 数组 或 对象 进行解析并导入到 HTML 对应的 DOM 元素中</b>
+
+```html
+<div id="app">
+    <h1>展示数据</h1>
+    <div class="show-data"></div>
+</div>
+
+<script>
+    // A. 面向过程的方式
+    // 1. 获取元素
+    const showDataProcess = document.querySelector('.show-data')
+
+    // 2. 设置一个数组，用于存储数据
+    const dataProcess = [
+        '数据 - 01 ( JS 过程 )',
+        '数据 - 02 ( JS 过程 )',
+        '数据 - 03 ( JS 过程 )',
+        '数据 - 04 ( JS 过程 )',
+        '数据 - 05 ( JS 过程 )',
+    ]
+
+    // 3. 循环数组，将数组中的数据一一添加到 .show-data 中
+    dataProcess.forEach(item => {
+        // 3.1 创建一个 div 元素
+        const div = document.createElement('div')
+        // 3.2 设置 div 元素的内容
+        div.innerHTML = item
+        // 3.3 将 div 元素添加到 .show-data 中
+        showDataProcess.appendChild(div)
+    })
+
+    // B. 面向对象的方式
+    // 1. 获取元素
+    const showDataObj = document.querySelector('.show-data')
+
+    // 2. 设置一个数组，用于存储数据
+    const dataObj = [
+        '数据 - 01 ( JS 对象 )',
+        '数据 - 02 ( JS 对象 )',
+        '数据 - 03 ( JS 对象 )',
+        '数据 - 04 ( JS 对象 )',
+        '数据 - 05 ( JS 对象 )',
+    ]
+
+    // 3. 创建一个解析数组并展示数据到 HTML 中的方法
+    // arr: 需要展示的数组, ele: 需要展示到哪一个元素中
+    function arrToHTML (arr, ele) {
+        // 3.0 开始循环
+        arr.forEach(item => {
+            // 3.1 创建一个 div 元素
+            const div = document.createElement('div')
+            // 3.2 设置 div 元素的内容
+            div.innerHTML = item
+            // 3.3 将 div 元素添加到 .show-data 中
+            ele.appendChild(div)
+        })
+    }
+
+    // 4. 调用方法, 将数据展示出来
+    arrToHTML(dataObj, showDataObj)
+
+</script>
+```
+
+<img src="./img/showDataInJs.png" />
+
+​    <b>虽然经过上方的书写以及图片显示浏览器最终的展示效果, 但以上方式不论哪一个都会产生很多代码. 虽然面向对象会比面向过程好一些, 但也还是逃不出写很多方法和数据的命运...</b> 
+
+​    <b>接下来看看 Vue 中是如何书写的, 以及使用 `v-for` 指令可以带来那些便利.</b> 
+
+```vue
+<templante>
+    <div id="app">
+        <h1>展示数据</h1>
+        <div class="show-data">
+            <div>数据 - 01 ( HTML )</div>
+            <div>数据 - 02 ( HTML )</div>
+            <div>数据 - 03 ( HTML )</div>
+            <div>数据 - 04 ( HTML )</div>
+            <div>数据 - 05 ( HTML )</div>
+            <div v-for="item in items">{{ item }}</div>
+        </div>
+    </div>
+</templante>
+
+<script>
+export default {
+    name: 'App',
+    data() {
+        return {
+            items: [
+                "数据 - 01 ( Vue )",
+                "数据 - 02 ( Vue )",
+                "数据 - 03 ( Vue )",
+                "数据 - 04 ( Vue )",
+                "数据 - 05 ( Vue )"
+            ]
+        }
+    }
+}
+</script>
+```
+
+<img src=./img/showDataInVue.png />
+
+​    <b>通过以上观察, Vue 仅仅使用了一份 HTML 代码, 以及一份相同的数据, 它就完成了对数据的展示操作. 大大减少了代码量. Vue 同时也支持 对象 格式的数据展示, 和正常使用数据时一样.</b> 
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 基础项目</title>
+    <!-- 导入自己的样式文件 -->
+    <link rel="stylesheet" href="./src/css/index.css">
+</head>
+<body>
+    <div id="app">
+        <h1>展示数据</h1>
+        <div class="show-data">
+            
+            <div v-for="item in items" :key="item.id">{{ item.content }}</div>
+        </div>
+    </div>
+    
+    <script>
+    	const info = {
+            data() {
+                return {
+                    lists: [
+                        {
+                            id: 1,
+                            content: "数据 - 01 ( Vue )"
+                        },
+                        {
+                            id: 2,
+                            content: "数据 - 02 ( Vue )"
+                        },
+                        {
+                            id: 3,
+                            content: "数据 - 03 ( Vue )"
+                        },
+                        {
+                            id: 4,
+                            content: "数据 - 04 ( Vue )"
+                        },
+                        {
+                            id: 5,
+                            content: "数据 - 05 ( Vue )"
+                        },
+                    ]
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+```
+
+​    <b>以上就是 `v-for` 的全部用法了. 不难发现使用 Vue 和不使用的代码量, 使用 Vue 脚手架可以大幅减少程序员在开发过程中的书写量, 从而也可以更快的开发, 进而提升效率减少代码庸于.</b> 
+
+### D. v-if 指令
+
+​    <b>`v-if` 是用于控制 HTML 的组件是否呈现出来, 如果值为 "真 ( true )" 则加载, 否则则不加载. (真值: 1, true, 非空字符串; 假值: 0, false, undefined, null, "" )</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <h2 v-if="foodItems <= 0">{{ title.null }}</h2>
+        <div v-else="isShow > 0">
+            <h2>{{ title.has }}</h2>
+            <ul>
+                <li
+                    class="food-item"
+                    v-for="(item, index) in foodItems"
+                    :key="index"
+                > {{ index + 1 }}. {{ item }}</li>
+            </ul>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'Index',
+    data() {
+        return {
+            title: {
+                null: '暂时没有选取任何食物',
+                has: '当前选取的食物有:'
+            },
+            foodItems: ["牛香咖啡", "奥良烤鸡", "油炸花生", "清蒸龙虾"]
+        }
+    }
+};
+</script>
+```
+
+​    <b>当有食物的时候则会显示到 HTML 的 DOM 元素中. 如下所示:</b> 
+
+<img src="./img/vIfBrowser.png" />
+
+​    <b>当没有食物时则会按照预先设置的那样, 走到 `v-if` 分支时就会加载第一项 ( `v-if="foodItems <= 0"` ) 也就是说当食物小于 0 或等于 0 时就会显示第一个 HTML 选项, 我们将 Vue 中的 `foodItems` 项清空再来查看浏览器最终的渲染结果. 如图所示: </b> 
+
+<img src="./img/vIfNull.png" />
+
+​    <b>最终的选然还是取决于是否有食物的数值, `v-if` 会根据最终条件判断是否渲染该部分结构.</b> 
+
+<b>案例: 01</b>
+
+​    <b>使用 `v-if` 配合点击事件使提问框中的答案按照需求决定是否显示.</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <div class="question-box">
+            <h1>拓展提高</h1>
+            <p>在日语中 "手紙 [ てがみ ]" 在日语中的含义.</p>
+            <p v-if="isShow">"手紙 [ てがみ ]" 在日语中的含义是: 信 Or 信件 的意思.</p>
+            <button @click="isShow = !isShow">{{ isShow ? "隐藏" : "显示" }}答案</button>
+        </div>
+    </div>
+</template>
+
+<script>
+
+export default {
+    name: 'index',
+    props: {},
+    data() {
+        return {
+            isShow: false,
+        }
+    },
+}
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.6rem;
+
+    .question-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        width: 60rem;
+        height: 20rem;
+        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
+        padding: 2rem;
+
+        button {
+            width: 10rem;
+            height: 4rem;
+            align-self: end;
+            font-weight: 700;
+            color: #fff;
+            background-color: #409EFF;
+            outline: none;
+            border: none;
+            border-radius: .5rem;
+            margin-right: 3rem;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #a0cfff;
+            }
+        }
+    }
+}
+</style>
+
+```
+
+<img src="./img/questionNone.png" />
+
+<img src="./img/questionShow.png" />
+
+​    <b>经过以上练习基本上就可以掌握 Vue 中 `v-if` 的基本用法了. 但需要注意的是 `v-if` 和 `v-else-if` 以及 `v-else` 与普通 JavaScript 中的判断语句使用方式一致, 所以也就是说以上所有的判断性 DOM 元素都必须相邻使用, 每一组 `v-if` 都不能在判断时被分隔. 还有一点需要注意的是: `v-if` 是决定该数据在 HTML 中是否被渲染, 也就是说如果是 false 的话就不会创建元素, 而还有一个与其很相似的指令 `v-show` 决定的是该元素是否在 DOM 中显示, 而不是是否渲染, 最终呈现的则是: `<dom style="display: none;">v-show 的效果</dom>` 最终该元素只是在样式中被隐藏了, 而不是没有被渲染.</b> 
+
+### E. 创建事件
+
+​    <b>经过以上的练习也可以大概知道如何创建事件了, 不过那是简写方式 `@事件名称` 而全拼则是: `v-on:事件名称`, 需要注意的是: 这里的所有事件名称都不需要加上 `on` 如: `onclic` 则是 `@click` 或是 `v-on:click` 的形式, 以此类推.</b>
+
+### F. 计算属性
+
+​    <b>计算属性: `computed` 则是为了避免在 HTML 模板中书写过多的逻辑属性, 如上方 ( D )练习中使用的`{{ isShow ? "隐藏" : "显示" }}答案`, 如果还有其他地方依旧用到了该属性, 那么就还需要在 HTML 中反复书写... 这非常不符合 Vue 逻辑且处理事件过多也会影响程序的运行速度, 并且程序员需要书写更多的代码大大降低了工作进程. 在这个时候就可以使用 Vue 提供的 `computed` 计算属性. </b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <div class="question-box">
+            <h1>拓展提高</h1>
+            <p>在日语中 "手紙 [ てがみ ]" 在日语中的含义.</p>
+            <p v-if="isShow">"手紙 [ てがみ ]" 在日语中的含义是: 信 Or 信件 的意思.</p>
+            <button @click="isShow = !isShow">{{ isShowToStr }}答案</button>
+        </div>
+    </div>
+</template>
+
+<script>
+
+export default {
+    name: 'index',
+    props: {},
+    data() {
+        return {
+            isShow: false,
+        }
+    },
+    computed: {
+        isShowToStr () {
+            return this.isShow ? "隐藏" : "显示"
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.6rem;
+
+    .question-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        width: 60rem;
+        height: 20rem;
+        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
+        padding: 2rem;
+
+        button {
+            width: 10rem;
+            height: 4rem;
+            align-self: end;
+            font-weight: 700;
+            color: #fff;
+            background-color: #409EFF;
+            outline: none;
+            border: none;
+            border-radius: .5rem;
+            margin-right: 3rem;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #a0cfff;
+            }
+        }
+    }
+}
+</style>
+
+```
+
+### G. 函数属性
+
+​    <b>Vue 除了提供计算也提供了 ( methods ) 函数属性, 多用于: 表单验证、Ajax 数据传递、事件函数等, 且在 Vue 中的 `methods` 内部定义函数的好处是可以直接使用 `this.` 的形式访问到 Vue 中 ` data()` 函数内所定义的数据. 且构思清晰减少 HTML 代码量, 并且还可以进行复用.</b>  
+
+```vue
+<template>
+    <div class="index-project">
+        <div class="question-box">
+            <h1>拓展提高</h1>
+            <p>在日语中 "手紙 [ てがみ ]" 在日语中的含义.</p>
+            <p v-if="isShow">"手紙 [ てがみ ]" 在日语中的含义是: 信 Or 信件 的意思.</p>
+            <button @click="isShowOpposite">{{ isShowToStr }}答案</button>
+        </div>
+    </div>
+</template>
+
+<script>
+
+export default {
+    name: 'index',
+    props: {},
+    data() {
+        return {
+            isShow: false,
+        }
+    },
+    methods: {
+        isShowOpposite () {
+            return this.isShow = !this.isShow
+        }
+    },
+    computed: {
+        isShowToStr () {
+            return this.isShow ? "隐藏" : "显示"
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.6rem;
+
+    .question-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        width: 60rem;
+        height: 20rem;
+        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
+        padding: 2rem;
+
+        button {
+            width: 10rem;
+            height: 4rem;
+            align-self: end;
+            font-weight: 700;
+            color: #fff;
+            background-color: #409EFF;
+            outline: none;
+            border: none;
+            border-radius: .5rem;
+            margin-right: 3rem;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #a0cfff;
+            }
+        }
+    }
+}
+</style>
+
+```
+
+.
 
