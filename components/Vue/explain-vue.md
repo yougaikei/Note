@@ -587,7 +587,7 @@ export default {
 
 ​    <b>经过以上的练习也可以大概知道如何创建事件了, 不过那是简写方式 `@事件名称` 而全拼则是: `v-on:事件名称`, 需要注意的是: 这里的所有事件名称都不需要加上 `on` 如: `onclic` 则是 `@click` 或是 `v-on:click` 的形式, 以此类推.</b>
 
-### F. 计算属性
+### F. computed 计算属性
 
 ​    <b>计算属性: `computed` 则是为了避免在 HTML 模板中书写过多的逻辑属性, 如上方 ( D )练习中使用的`{{ isShow ? "隐藏" : "显示" }}答案`, 如果还有其他地方依旧用到了该属性, 那么就还需要在 HTML 中反复书写... 这非常不符合 Vue 逻辑且处理事件过多也会影响程序的运行速度, 并且程序员需要书写更多的代码大大降低了工作进程. 在这个时候就可以使用 Vue 提供的 `computed` 计算属性. </b> 
 
@@ -663,9 +663,9 @@ export default {
 
 ```
 
-### G. 函数属性
+### G. methods 函数属性
 
-​    <b>Vue 除了提供计算也提供了 ( methods ) 函数属性, 多用于: 表单验证、Ajax 数据传递、事件函数等, 且在 Vue 中的 `methods` 内部定义函数的好处是可以直接使用 `this.` 的形式访问到 Vue 中 ` data()` 函数内所定义的数据. 且构思清晰减少 HTML 代码量, 并且还可以进行复用.</b>  
+​    <b>Vue 除了提供计算属性也提供了 ( methods ) 函数属性, 多用于: 表单验证、Ajax 数据传递、事件函数等, 且在 Vue 中的 `methods` 内部定义函数的好处是可以直接使用 `this.` 的形式访问到 Vue 中 ` data()` 函数内所定义的数据. 且构思清晰减少 HTML 代码量, 并且还可以进行复用.</b>  
 
 ```vue
 <template>
@@ -744,5 +744,123 @@ export default {
 
 ```
 
-.
+### H. watch 监听属性
 
+​    <b>`watch` 监听属性, 用来监听属性变化的, 使用 `watch` 时需要使 <u>监听器名字</u> 与 <u>被监听的属性名</u> 一致, 监听器需要接受两个属性: `newVal` ( 新属性值 ) 和 `oldVal` ( 旧属性值 ) 作为参数.</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <div class="box">
+            <h1>简单问答</h1>
+            <p class="question">在日语中 "手紙 [ てがみ ]" 在日语中的含义.</p>
+            <p class="answer" v-show="isShow">答: 手紙 [ てがみ ] 的意思是 "信件".</p>
+            <button @click="isShowEvent">
+                {{ isShowCom }}
+            </button>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'Index',
+    data() {
+        return {
+            // 数据: 用于存储数据, 该数据可以被访问并使用
+            isShow: false, // 是否显示答案
+            countDown: 5, // 倒计时: 5秒
+            timer: null, // 定时器
+        }
+    },
+    computed: {
+        // 计算属性: 用于计算数据, 该属性可以直接被访问并使用
+        isShowCom() {
+            // 返回值: 按照 isShow 数据进行计算并将结果返回, 该数据可以被直接访问并使用
+            // 且该数据被多次访问时, 只会计算一次, 之后会将计算结果进行缓存, 直到数据发生变化时才会重新计算
+            return this.isShow
+                ? '显示答案' + this.countDown + '秒' // 如果为 "真" 则显示 "显示答案"
+                : '隐藏答案' // 如果为 "假" 则显示 "隐藏答案"
+        }
+    },
+    methods: {
+        // 方法属性: 用于存储方法, 该方法可以直接被访问并使用
+        isShowEvent() {
+            // 作用: 用于控制答案的显示和隐藏
+            // 该属性不会被缓存, 每次访问都会重新计算
+            this.isShow = !this.isShow // 将 isShow 数据取反
+        }
+    },
+    watch: {
+        // 监听属性: 用于监听数据的变化, 该属性不可以直接被访问, 主要作用用于比较耗时的操作或是异步操作等
+        // 在监听过程中会将新值和旧值传入到回调函数中, 最后将新值返回到 data 数据中, 再由 data 数据更新视图
+        isShow(newVal, oldVal) {
+            // 这里需要注意的是: 监听值 和 需要监听的数据名称保持一致
+            if (newVal) {
+                this.countDown = 5; // 重置倒计时
+                if(this.timer) { // 判断如果定时器已经存在, 则清除定时器, 防止定时器叠加
+                    clearInterval(this.timer) // 清除定时器, 作用: 为了防止用户多次点击按钮, 导致定时器叠加
+                    this.timer = null; // 使定时器为空, 作用: 为了防止用户多次点击按钮, 导致定时器叠加
+                }
+
+                this.timer = setInterval(() => { // 设置定时器
+                    this.countDown -= 1; // 倒计时减 1
+                    if (this.countDown === 0) { // 如果倒计时为0, 则隐藏答案, 并清除定时器
+                        this.isShow = false; // 隐藏答案
+                        clearInterval(this.timer); // 清除定时器
+                        this.timer = null; // 使定时器为空
+                    }
+                }, 1000)
+            }
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #f2f2f2;
+
+    .box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        width: 50vw;
+        height: 50vh;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 2rem;
+
+        p {
+            font-size: 2.4rem;
+        }
+
+        button {
+            align-self: end;
+            width: 8.6rem;
+            height: 4rem;
+            background-image: linear-gradient(45deg,
+                    hsl(218deg, 100%, 50%) 0%,
+                    hsl(187deg, 100%, 40%) 100%);
+            font-weight: 600;
+            color: #fff;
+            border-radius: .4rem;
+            cursor: pointer;
+        }
+    }
+}
+</style>
+```
+
+### 附录:
+
+#### 1. computed 计算属性 与 methods 函数属性 的区别
+
+​    <b></b>
