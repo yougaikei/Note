@@ -123,3 +123,75 @@ yarn add axios
 
 ## 3. Mongodb 安装
 
+​    <b>下载地址:</b> <b>[MongoDB Server](https://www.mongodb.com/try/download/community)</b> 
+
+​    <b>如果安装版本较高如: </b>
+
+​    <b>安装过程:</b> 
+
+​        <b>1. 启动 MongoDB Install</b> 
+
+​        <b>2. 点击 Next 进行下一步安装</b> 
+
+<img src="./img/DBInstallA.png" /> 
+
+​        <b>3. 同意当前协议, 打勾后点击 Next 继续安装</b> 
+
+​        <b>4. 保持当前选项点击 Next 继续下一步的安装, 此处需要主义的是数据地址和日志地址需要自行记住.</b> 
+
+​       <b>5. 此处需要注意的是要将左下角的 Install MongoDB Compass 选项取消选择! 然后再点击 Next 下一步, 否则会安装一个额外附带的无效插件.</b> 
+
+<img src="./img/DBInstallE.png" />
+
+​        <b>6. 完成以上步骤以后就可以完成最后的安装了, 点击 Install 选项进行安装操作. 安装完成后点击 Finish. ( 以下为高版本配置: 然后找到安装好的 MongoDB 服务目录 `C:\Program Files\MongoDB\Server\6.0` 将下载好的 MongoDB Shell 插件直接放入 )</b> 
+
+<img src="./img/EnvironmentVariable.png" />
+
+​        <b>7. 配置环境变量: 此电脑 ( 我的电脑 ) =\> 右击 =\> 属性 =\> 高级系统设置 =\> 配置 Path 路径, 将 MongoDB 和 MongoDB Shell 的 bin 目录地址都存放其中.</b> 
+
+<img src="./img/EnvironmentVariableA.png" />
+
+<img src="./img/EnvironmentVariableB.png" />
+
+<img src="./img/EnvironmentVariableC.png" />
+
+<img src="./img/EnvironmentVariableD.png" />
+
+### 1. 使用语法 ( 基础 )
+
+​    <b>A. 启动 MongoDB:</b> <b style="text-decoration: underline;">net start mongodb</b>
+
+​    <b>B. 关闭 MongoDB:</b> <b style="text-decoration: underline;">net stop mongodb</b>
+
+```mongo
+// start
+net start mongodb
+
+// end
+net stop mongodb
+```
+
+# 2. ProjectStart
+
+​    <b>初始化项目:</b> 
+
+```js
+// 初始化项目
+create-react-app react-library
+
+// 可选: 如使用 cmd 创建, 还需再 VS Code 中打开:
+code ./react-library
+
+// 安装所有依赖包
+yarn
+
+// 安装依赖项
+yarn add antd axios moment redux react-redux react-router-dom redux-saga
+
+// 安装开发项
+yarn add --dev redux-devtools-extension
+
+```
+
+
+
