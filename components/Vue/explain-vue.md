@@ -1,4 +1,4 @@
-# VueProject
+# Vue Project
 
 ## 1. 创建方法:
 
@@ -38,6 +38,299 @@ yarn create vite // 加载完成后输入项目名后需要自行选择创建的
 ​    <b>Vs Code ( 全称: Visual Studio Code ), 是一款很不错的编程软件, 其内部提供了更为便捷的插件模块, 及代码提示功能.</b> 
 
 ​    <b>下载地址: </b> [点击下载](https://code.visualstudio.com/) <b>&lt;= ctrl + click ( 点击 )</b>
+
+#### 1. VsCode 内置命令
+
+​    <b>为了方便后期更方便的使用 Vs Code 编辑器, 所以官方预留出了一些  API. 如: 制表位的 `$1, $2, $3`... 或 最终光标位置 `$0`</b> 
+
+<b>Visual Studio Code 中的代码片段完整文档:</b> [点击进入](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax) 
+
+##### A.  变量命令
+
+``` vscode
+// 当前选的 顶文本 或 空字符串
+TM_SELECTED_TEXT
+
+// 当前行的内容
+TM_CURRENT_LINE
+
+// 光标 或 空字符串下的单词内容
+TM_CURRENT_WORD
+
+// 基于零索引的行号
+TM_LINE_INDEX
+
+// 基于单索引的行号
+TM_LINE_NUMBER
+
+// 当前文档的文件名
+TM_FILENAME
+
+//当前文档的文件名, 无扩展名
+TM_FILENAME_BASE
+
+//当前文档的目录
+TM_DIRECTORY
+
+// 从盘符起 => 当前文件的绝对路径
+TM_FILEPATH
+
+// 从根目录起 => 当前文件的相对路径
+RELATIVE_FILEPATH
+
+// 剪贴板的内容
+CLIPBOARD
+
+// 打开的 工作空间 或 文件夹的名称
+WORKSPACE_NAME
+
+// 打开的工作空间或文件夹的路径
+WORKSPACE_FOLDER
+
+// 基于零索引的游标编号
+CURSOR_INDEX
+
+// 基于单索引的游标编号
+CURSOR_NUMBER
+```
+
+##### B. 时间命令
+
+```vscode
+// 本年度
+CURRENT_YEAR
+
+// 当年的最后两位数
+CURRENT_YEAR_SHORT
+
+// 两位数的月份 (例如 "02")
+CURRENT_MONTH
+
+// 月份的全名 (例如 "July)
+CURRENT_MONTH_NAME
+
+//月份的简称 (例如 "Jul")
+CURRENT_MONTH_NAME_SHORT
+
+// 两位数的月份中的日期 (例如 "08")
+CURRENT_DATE
+
+// 星期(例如 "Monday")
+CURRENT_DAY_NAME
+
+// 星期简称(例如 "Mon")
+CURRENT_DAY_NAME_SHORT
+
+// 24 小时制格式的当前小时
+CURRENT_HOUR
+
+// 当前分钟以两位数表示
+CURRENT_MINUTE
+
+// 当前秒为两位数
+CURRENT_SECOND
+
+// 自 Unix 纪元以来的秒数
+CURRENT_SECONDS_UNIX
+```
+
+##### C. 随机值
+
+```vscode
+// 6 个随机以 10 为基数的数字
+RANDOM
+
+// 6 个随机以 16 为基数的数字
+RANDOM_HEX
+
+// 版本 4 UUID
+UUID
+```
+
+##### D. 注释命令
+
+```vscode
+// 前注释, 如: "/*" 或 "<!--"
+BLOCK_COMMENT_START
+
+// 后注释, 如: "*/" 和 "-->"
+BLOCK_COMMENT_END
+
+// 单注释
+LINE_COMMENT
+```
+
+#### 2. Vue 代码段
+
+```json
+{
+    "vue2Template": {
+		"prefix": "vue2Template",
+		"body": [
+			"<template>",
+			"    <div class=\"\">${TM_FILENAME_BASE}</div>",
+			"</template>\n",
+			"<script>",
+			"export default {",
+			"    name: '${TM_FILENAME_BASE}',",
+			"    data() {",
+			"        return {$1}",
+			"    },",
+            "    methods: {},",
+            "    computed: {},",
+            "    watch: {},",
+            "    created() {},",
+			"}",
+			"</script>\n",
+			"<style scoped>$2</style>"
+		],
+		"description": "Create a new Vue @2.x base template"
+	},
+    "vue2Props": {
+        "prefix": "vue2Props",
+        "body": [
+			"<template>",
+			"    <div class=\"\">${TM_FILENAME_BASE}</div>",
+			"</template>\n",
+			"<script>",
+            "import {$1} from '$2'",
+			"export default {",
+			"    name: '${TM_FILENAME_BASE}',",
+			"    props: {},",
+			"    data() {",
+			"        return {$3}",
+			"    },",
+            "    methods: {},",
+            "    computed: {},",
+            "    watch: {},",
+            "    created() {},",
+			"}",
+			"</script>\n",
+			"<style scoped>$4</style>"
+		],
+        "description": "Create a new Vue @2.x props template"
+    },
+    "vue2Less": {
+        "prefix": "vue2Less",
+        "body": [
+            "<template>",
+            "    <div class=\"\">$1</div>",
+			"</template>\n",
+			"<script>",
+			"export default {",
+			"    name: '${TM_FILENAME_BASE}',",
+			"    data() {",
+			"        return {$2}",
+			"    },",
+            "    methods: {},",
+            "    computed: {},",
+            "    watch: {},",
+            "    created() {},",
+			"}",
+			"</script>\n",
+			"<style lang=\"less\" scoped>$3</style>"
+        ],
+        "description": "Create a new Vue @2.x less template"
+    },
+    "vue2Scss": {
+        "prefix": "vue2Sass",
+        "body": [
+            "<template>",
+            "    <div class=\"\">$1</div>",
+			"</template>\n",
+			"<script>",
+			"export default {",
+			"    name: '${TM_FILENAME_BASE}',",
+			"    data() {",
+			"        return {$2}",
+			"    },",
+            "    methods: {},",
+            "    computed: {},",
+            "    watch: {},",
+            "    created() {},",
+			"}",
+			"</script>\n",
+			"<style lang=\"scss\" scoped>$3</style>"
+        ],
+        "description": "Create a new Vue @2.x scss template"
+    },
+    "vue2Ts": {
+        "prefix": "vue2Ts",
+        "body": [
+            "<template>",
+			"    <div class=\"\">${TM_FILENAME_BASE}</div>",
+			"</template>\n",
+			"<script lang=\"ts\">",
+			"export default {",
+			"    name: '${TM_FILENAME_BASE}',",
+			"    data() {",
+			"        return {$1}",
+			"    },",
+            "    methods: {},",
+            "    computed: {},",
+            "    watch: {},",
+            "    created() {},",
+			"}",
+			"</script>\n",
+			"<style scoped>$2</style>"
+        ]
+    },
+    "vue3Template": {
+        "prefix": "Vue3Template",
+        "body": [
+            "<template>",
+            "    <div class=\"\">${TM_FILENAME_BASE}</div>",
+            "</template>\n",
+            "<script setup>",
+            "import {$1} from 'vue'",
+            "</script>\n",
+            "<style scoped>$2</style>"
+        ],
+        "description": "Create a new Vue @3.x base template"
+    },
+    "vue3Less": {
+        "prefix": "Vue3Less",
+        "body": [
+            "<template>",
+            "    <div class=\"\">$1</div>",
+            "</template>\n",
+            "<script setup>",
+            "import {$2} from 'vue'",
+            "</script>\n",
+            "<style lang=\"less\" scoped>$3</style>"
+        ],
+        "description": "Create a new Vue @3.x scss template"
+    },
+    "vue3Scss": {
+        "prefix": "Vue3Scss",
+        "body": [
+            "<template>",
+            "    <div class=\"\">$1</div>",
+            "</template>\n",
+            "<script setup>",
+            "import {$2} from 'vue'",
+            "</script>\n",
+            "<style lang=\"scss\" scoped>$3</style>"
+        ],
+        "description": "Create a new Vue @3.x scss template"
+    },
+    "vue3Ts": {
+        "prefix": "Vue3Ts",
+        "body": [
+            "<template>",
+            "    <div class=\"\">$1</div>",
+            "</template>\n",
+            "<script setup lang=\"ts\">",
+            "import {$2} from 'vue'",
+            "</script>\n",
+            "<style scoped>$3</style>"
+        ],
+        "description": "Create a new Vue @3.x Types template"
+    }
+}
+```
+
+​    <b style="color: #E6A23C">将以上代码复制到 VsCode => 用户代码片段
 
 ### B. Auto Rename Tag
 
@@ -526,7 +819,6 @@ export default {
 
 export default {
     name: 'index',
-    props: {},
     data() {
         return {
             isShow: false,
@@ -607,7 +899,6 @@ export default {
 
 export default {
     name: 'index',
-    props: {},
     data() {
         return {
             isShow: false,
@@ -683,7 +974,6 @@ export default {
 
 export default {
     name: 'index',
-    props: {},
     data() {
         return {
             isShow: false,
@@ -863,4 +1153,1796 @@ export default {
 
 #### 1. computed 计算属性 与 methods 函数属性 的区别
 
-​    <b></b>
+​    <b>为了更好的使用 Vue 脚手架, 本次将对 computed 和 methods 进行区分测试. 测试数据如下:</b>
+
+```js
+const dataList = [
+    "Vue.js 从入门到精通",
+    "Vue 3.x 入门指南",
+    "Vue.js 2.x 实战",
+    "React 全家桶",
+    "React 入门指南",
+    "你不知道的 JavaScript 实战技巧"
+]
+```
+
+​    <b>任务: 将dataList 中的数据进行筛选并输出到 HTML 中进行展示.</b> 
+
+##### illustration 例图
+
+<img src="./img/MethodsAndComputed01.png" />
+
+##### computed 测试
+
+​    <b>本次测试目的为辨别 computed 属性和 methods 属性的区别, 为了更好的区分将测试分为两部分进行展示, 该部分将使用 computed 完成筛选 dataList 内容中包含 Vue 的项目并称现在 HTML 无序列表中. 实现方法如下:</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <ul>
+            <li v-for="content in isVue">
+                {{ content }}
+            </li>
+        </ul>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            dataList: [
+                "Vue.js 从入门到精通",
+                "Vue 3.x 入门指南",
+                "Vue.js 2.x 实战",
+                "React 全家桶",
+                "React 入门指南",
+                "你不知道的 JavaScript 实战技巧"
+            ]
+        }
+    },
+    computed: {
+        isVue() {
+            return this.dataList.filter(item => item.includes('Vue'))
+        }
+    },
+}
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #333;
+    padding: 20px;
+
+    ul {
+        color: white;
+        font-size: 40px;
+
+        li {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    }
+}
+</style>
+
+```
+
+##### methods 测试
+
+​    <b>接下来使用 methods 完成筛选 dataList 内容中包含 Vue 的项目并称现在 HTML 无序列表中.</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <ul>
+            <li v-for="content in getVue()">
+                {{ content }}
+            </li>
+        </ul>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            dataList: [
+                "Vue.js 从入门到精通",
+                "Vue 3.x 入门指南",
+                "Vue.js 2.x 实战",
+                "React 全家桶",
+                "React 入门指南",
+                "你不知道的 JavaScript 实战技巧"
+            ]
+        }
+    },
+    methods: {
+        getVue() {
+            return this.dataList.filter(item => item.includes('Vue'))
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #333;
+
+    ul {
+        color: white;
+        font-size: 40px;
+
+        li {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    }
+}
+</style>
+
+```
+
+<b style="color: #F56C6C;">※ 注意: 在使用 methods 函数属性时需要在后方加上小括号进行方法的调用</b> 
+
+##### cache 缓存测试
+
+<b>经过以上书写发现两者都可以对 dataList 中的内容进行筛选, 好像并没什么区别.为了更好的观测它们, 接下来对它们进行缓存测试, 给 HTML 中添加一个按钮, 并赋予其点击事件. 为了能够直观感受到是否真的运行了, 在 Vue 的 script 标签中, 或是 Js 文件中的 Vue 数据上给一个count 变量用来记录点击次数.代码如下:</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <ul>
+            <li v-for="content in getVue()">
+                {{ content }}
+            </li>
+        </ul>
+        <button @click="count++">被点击了 {{ count }} 次</button>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            dataList: [
+                "Vue.js 从入门到精通",
+                "Vue 3.x 入门指南",
+                "Vue.js 2.x 实战",
+                "React 全家桶",
+                "React 入门指南",
+                "你不知道的 JavaScript 实战技巧"
+            ],
+            count: 0
+        }
+    },
+    methods: {
+        getVue() {
+            console.log('getVue 被调用了')
+            return this.dataList.filter(item => item.includes('Vue'))
+        }
+    },
+    computed: {
+        isVue() {
+            console.log('isVue 被调用了')
+            return this.dataList.filter(item => item.includes('Vue'))
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #333;
+
+    ul {
+        color: white;
+        font-size: 40px;
+
+        li {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    }
+
+    button {
+        width: 220px;
+        height: 60px;
+        padding: 10px 20px;
+        color: white;
+        font-size: 24px;
+        background-color: #409EFF;
+        border: none;
+        outline: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+}
+</style>
+```
+
+​    <b>接下来分别使用以上两种方法进行测试, 得到的结果如下:</b> 
+
+<b>methods 结果为:</b> 
+
+<img src="./img/MethodsAndComputed02.png" />
+
+<b>computed 结果为:</b>
+
+<img src="./img/MethodsAndComputed03.png" />
+
+##### summary 总结
+
+<b style="color: #67C23A">经过以上测试得出:</b>
+
+​    <b style="color: #67C23A;">1. computed 计算属性更适合做一些简单的操作.但 methods 函数属性则适合做一些业务性或逻辑性的复杂操作.</b> 
+
+​    <b style="color: #67C23A;">2.computed 计算属性与 methods 函数属性相比, 计算属性会先比较数值是否发生变化, 如果没有变化则会优先读取缓存中的值.</b> 
+
+​    <b style="color: #67C23A;">3. 计算属性可以直接用于 HTML 模板中, 与 data 数据属性的使用方法一致.</b> 
+
+​    <b style="color: #67C23A;">5. methods 函数属性更适合作用于事件的监听或是公共业务的逻辑等...当然你也可以将其当作普通的 JavaScript 函数来使用或操作.</b> 
+
+#### 2. computed 计算属性 与 watch 监听器 的区别
+
+​    <b>为了更好的使用 Vue 脚手架, 本次将对 computed 和 watch 进行区分测试. 测试数据如下:</b> 
+
+```js
+const dataList = [];
+
+dataList.push("JavaScript 悟道")
+```
+
+​    <b>任务:  通过一下方式对 dataList 内容条数进行统筹, 并通过后期点击 "添加图书" 对 dataList 数据新增 "JavaScript 悟道" 项, 并实时更新书本的数目以及 HTML 对图书的展示</b> 
+
+##### illustration 例图
+
+<b>base</b>
+
+<img src="./img/WatchAndComputed01.png" />
+
+<b>onClick</b> 
+
+<img src="./img/WatchAndComputed02.png" />
+
+##### computed 测试
+
+​    <b>本次测试目的为辨别 computed 属性和 watch 属性的区别, 为了更好的区分将测试分为两部分进行展示, 该部分将使用 computed 完成对 dataList 内容计数, 并通过后期点击 "添加图书" 对 dataList 数据新增 "JavaScript 悟道" 项, 并实时更新书本的数目以及 HTML 对图书的展示. 实现方法如下:</b>
+
+```vue
+<template>
+    <div class="index-project">
+        <ul>
+            <li v-for="content in dataList">
+                {{ content }}
+            </li>
+        </ul>
+        <div class="book-sum">
+            当前图书共计 {{ bookSum }} 本
+        </div>
+        <button @click="addBook">
+            添加图书
+        </button>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            dataList: [
+                "Vue.js 从入门到精通",
+                "Vue 3.x 入门指南",
+                "Vue.js 2.x 实战",
+                "React 全家桶",
+                "React 入门指南",
+                "你不知道的 JavaScript 实战技巧"
+            ],
+        }
+    },
+    methods: {
+        addBook() {
+            // 判断 datdList 中是否存在 "JavaScript 悟道", 如果存在, 则不添加
+            if (this.dataList.indexOf("JavaScript 悟道") === -1) {
+                this.dataList.push("JavaScript 悟道")
+            }
+        }
+    },
+    computed: {
+        bookSum() {
+            return this.dataList.length
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #333;
+
+    ul {
+        color: white;
+        font-size: 40px;
+
+        li {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    }
+
+    .book-sum {
+        margin: 20px 0;
+        color: white;
+        font-size: 24px;
+    }
+
+    button {
+        width: 220px;
+        height: 60px;
+        padding: 10px 20px;
+        color: white;
+        font-size: 24px;
+        background-color: #409EFF;
+        border: none;
+        outline: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+}
+</style>
+
+```
+
+##### watch 测试
+
+​    <b>接下来使用 watch 完成以上对新增项的计数功能</b> 
+
+```vue
+<template>
+  <div class="index-project">
+      <ul>
+          <li v-for="content in dataList">
+              {{ content }}
+          </li>
+      </ul>
+      <div class="book-sum">
+          当前图书共计 {{ sum }} 本
+      </div>
+      <button @click="addBook">
+          添加图书
+      </button>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'index',
+  data() {
+      return {
+          dataList: [
+              "Vue.js 从入门到精通",
+              "Vue 3.x 入门指南",
+              "Vue.js 2.x 实战",
+              "React 全家桶",
+              "React 入门指南",
+              "你不知道的 JavaScript 实战技巧"
+          ],
+          // 因为 watch 无法直接监听数组后产生的变换, 所以需要有一个变量来存储数组的长度
+          // 再通过后期监听等方式进行改变
+          sum: 0
+      }
+  },
+  methods: {
+      addBook() {
+          // 判断 datdList 中是否存在 "JavaScript 悟道", 如果存在, 则不添加
+          if (this.dataList.indexOf("JavaScript 悟道") === -1) {
+              this.dataList.push("JavaScript 悟道")
+          }
+      }
+  },
+  computed: {
+      bookSum() {
+          return this.dataList.length
+      }
+  },
+  watch: {
+    // watch 在监听数组 或 对象 时发变化时, 需要使用 deep: true
+      dataList: {
+        deep: true, // deep 为 true 时, 监听数组中的每一项
+        // handler 为默认的监听函数, 内部会传入 newVal (新值) 和 oldVal (旧值)
+        handler(newVal) {
+          // 通过改变 sum 的值, 来触发视图的更新
+          this.sum = newVal.length
+        }
+      }
+  },
+  created() {
+    // created 钩子中, 会在页面加载完毕后触发
+    // 此外, 钩子有: ========================
+    //     1. beforeCreate 作用: 在实例初始化之后, 数据观测(data observer) 和 event/watcher 事件配置之前被调用
+    //     2. created 作用: 在实例创建完成后被立即调用, 在这一步, 实例已完成以下的配置: 数据观测(data observer), 属性和方法的运算, watch/event 事件回调
+    //     3. beforeMount 作用: 在挂载开始之前被调用, 相关的 render 函数首次被调用
+    //     4. mounted 作用: el 被新创建的 vm.$el 替换, 并挂载到实例上去之后调用该钩子
+    //     5. beforeUpdate 作用: 数据更新时调用, 发生在虚拟 DOM 打补丁之前
+    //     6. updated 作用: 由于数据更改导致的虚拟 DOM 重新渲染和打补丁, 在这之后会调用该钩子
+    //     7. beforeDestroy 作用: 实例销毁之前调用, 在这一步, 实例仍然完全可用
+    //     8. destroyed 作用: Vue 实例销毁后调用, 调用后, 所有的事件监听器会被移除, 所有的子实例也会被销毁
+    // 因为 watch 无法在浏览器加载完自动触发, 所以需要在 created 钩子中手动修改 sum 的初始值
+    // ====================================
+    this.sum = this.dataList.length
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #333;
+
+  ul {
+      color: white;
+      font-size: 40px;
+
+      li {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+      }
+  }
+
+  .book-sum {
+      margin: 20px 0;
+      color: white;
+      font-size: 24px;
+  }
+
+  button {
+      width: 220px;
+      height: 60px;
+      padding: 10px 20px;
+      color: white;
+      font-size: 24px;
+      background-color: #409EFF;
+      border: none;
+      outline: none;
+      border-radius: 4px;
+      cursor: pointer;
+  }
+}
+</style>
+
+```
+
+##### summary 总结
+
+​    <b>通过以上操作发现与之前的实验结果一样, 还是没有什么具体区别, 但实际上两者需要根据项目的实际情况进行区分使用.如:</b>
+
+​    <b style="color: #67C23A;">1. computed 计算属性更适合简单的业务逻辑计算. 而 watch 监听属性则更偏向于一些耗时操作或是远程 API 的加载操作等...</b> 
+
+​    <b style="color: #67C23A;">2. computed 可以直接出现在 HTML 或是 Vue 项目中的 template 模板中进行使用. 而 watch 则需要在 data 中新建变量 或 依靠原有的变量数据才能进行展示如上方计数需要依靠 sum 变量才能成功在 HTML 中展示 dataList 的长度.</b> 
+
+​    <b style="color: #67C23A;">3. computed 是响应 data 数据变化, watch 则是响应数据变化</b> 
+
+​    <b style="color: #67C23A;">4. computed 有返回值, 而 watch 没有返回值</b> 
+
+​    <b style="color: #67C23A;">5. computed 属性可以设置 getter 和 setters 用于接收或修改 data 中的数据, 而 watch 则是仅可以修改 data 中的数据, 并没有 getter 和 setters 属性</b> 
+
+##### demonstrate 演示
+
+​    <b>演示 computed 计算属性的 getter 和 setters 的使用过程</b> 
+
+```vue
+<template>
+  <div class="index-project">
+      <ul>
+          <li v-for="content in dataList">
+              {{ content }}
+          </li>
+      </ul>
+      <div class="book-sum">
+          当前图书共计 {{ bookSum }} 本
+      </div>
+      <button @click="newBook = 'JavaScript 悟道'">
+          添加图书
+      </button>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'index',
+  data() {
+      return {
+          dataList: [
+              "Vue.js 从入门到精通",
+              "Vue 3.x 入门指南",
+              "Vue.js 2.x 实战",
+              "React 全家桶",
+              "React 入门指南",
+              "你不知道的 JavaScript 实战技巧"
+          ],
+          addNewBook: "", // 用于存储点击事件中的内容
+          isLock: false, // 设置节流锁, 防止重复添加, 默认为 false
+      }
+  },
+  computed: {
+      bookSum() {
+          return this.dataList.length
+      },
+      newBook: {
+        // 通过 get 和 set 方法实现双向绑定
+        get() {
+          return this.addNewBook // 将 addNewBook 的值赋值给 newBook
+        },
+        set(val) {
+          if (this.isLock === true) return; // 设置节流锁, 防止重复添加
+          if (val === "") return; // 如果输入框为空, 则不添加
+          if (this.addNewBook === val) return; // 如果输入框内容与添加的内容一致, 则不添加
+          if (this.dataList.indexOf(val) !== -1) return; // 如果 datdList 中已存在该内容, 则不添加
+          this.isLock = true // 设置节流锁, 防止重复添加, 上锁
+          this.addNewBook = val // 将点击事件中的内容赋值给 addNewBook
+          // 设置延时器, 2s 后将 addNewBook 添加到 dataList 中, 并解锁
+          setTimeout(() => {
+            this.dataList.push(val) // 将 addNewBook 添加到 dataList 中
+            this.isLock = false // 解锁
+          }, 2000) // 2s 后执行
+        }
+      }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #333;
+
+  ul {
+      color: white;
+      font-size: 40px;
+
+      li {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+      }
+  }
+
+  .book-sum {
+      margin: 20px 0;
+      color: white;
+      font-size: 24px;
+  }
+
+  button {
+      width: 220px;
+      height: 60px;
+      padding: 10px 20px;
+      color: white;
+      font-size: 24px;
+      background-color: #409EFF;
+      border: none;
+      outline: none;
+      border-radius: 4px;
+      cursor: pointer;
+  }
+}
+</style>
+
+```
+
+#### 3. methods 函数属性 与 watch 监听器 的区别
+
+   <b>比较了所有的 computed 计算属性, 只剩下 methods 函数属性 和 watch 监听属性没有比较了, 接下来看一下它们之间具体的区别是什么. </b> 
+
+##### illustration 例图
+
+​    <b>base</b>
+
+<img src="./img/MethodsAndWatch01.png" />
+
+​    <b>onClick</b> 
+
+<img src="./img/MethodsAndWatch02.png" />
+
+##### test 综合测试
+
+```vue
+<template>
+  <div class="index-project">
+    <ul>
+      <li v-for="content in dataList">
+        {{ content }}
+      </li>
+    </ul>
+    <div class="book-sum">当前图书共计 {{ bookSum }} 本</div>
+    <button @click="handleButton">添加图书</button>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "index",
+  data() {
+    return {
+      dataList: [
+        "Vue.js 从入门到精通",
+        "Vue 3.x 入门指南",
+        "Vue.js 2.x 实战",
+        "React 全家桶",
+        "React 入门指南",
+        "你不知道的 JavaScript 实战技巧",
+      ],
+      addNewBook: "", // 用于存储点击事件中的内容
+      isLock: false, // 设置节流锁, 防止重复添加, 默认为 false
+    };
+  },
+  methods: {
+    createBook() {
+      if (this.isLock === true) return; // 设置节流锁, 防止重复添加
+      this.isLock = true; // 设置节流锁, 防止重复添加, 上锁
+      // 设置延时器, 2s 后将 addNewBook 添加到 dataList 中, 并解锁
+      setTimeout(() => {
+        this.dataList.push(this.addNewBook); // 将 addNewBook 添加到 dataList 中
+        this.isLock = false; // 解锁
+      }, 2000); // 2s 后执行
+    },
+    handleButton() {
+      this.addNewBook = "JavaScript 悟道";
+    },
+  },
+  computed: {
+    bookSum() {
+      return this.dataList.length;
+    },
+  },
+  watch: {
+    addNewBook(newVal) {
+      if (newVal === "") return; // 如果输入框为空, 则不添加
+      if (this.dataList.indexOf(newVal) !== -1) return; // 如果 datdList 中已存在该内容, 则不添加
+      this.createBook();
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #333;
+
+  ul {
+    color: white;
+    font-size: 40px;
+
+    li {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+  }
+
+  .book-sum {
+    margin: 20px 0;
+    color: white;
+    font-size: 24px;
+  }
+
+  button {
+    width: 220px;
+    height: 60px;
+    padding: 10px 20px;
+    color: white;
+    font-size: 24px;
+    background-color: #409eff;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+}
+</style>
+
+```
+
+​    <b style="color: #409EFF;">以上代码通过点击按钮后执行 methods 方法函数中的 handleButton 按钮点击事件函数, 内部执行将 data 中的 addNewBook 变量赋值操作, 为其赋上新值 "JavaScript 悟道", 然后函数结束. 但由于 add New Book 是 watch 监听属性的监听对象, 所以该属性被触发, 内部判断输入内容是否为空或重复数据, 如果不是则运行 methods 函数属性中的 createBook 函数, 在 createBook 函数中先判断是否被锁住, 如没有则开启节流, 并启用延时器, 在 2 秒后执行将 addNewBook 的值添加到 data 属性中的 dataList 中, 并解锁节流锁, 至此 createBook 函数结束, 且 watch 监听器完成监听任务.</b> 
+
+##### summary 总结
+
+​    <b style="color: #67C23A;">1. methods 可以在 watch 中调用且可以直接在 HTML 或 template 模板中使用, 而 watch 则不能被调用, 也不能直接在上述的 HTML 或 template 模板中使用.</b> 
+
+​    <b style="color: #67C23A;">2. methods 函数属性的返回值比较自由, 可有可无. 但 watch 则默认负责处理比较耗时的操作, 且在操作完成后需要将值传递给需要的变量上, 不能将最终获取的值作为返回值进行返回. 但以上两个属性都可以为 data 数据的变化而进行对应的响应.</b> 
+
+## 4. Vue 进阶
+
+​    <b>本阶段将学习 表单处理、双向绑定、样式绑定方法等...</b> 
+
+### A. 表单数据
+
+​    <b>本小节将对表单的数据进行获取, 并在控制台输出</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>Index 页面</h1>
+        <section class="input-section">
+            <div class="add-input">
+                <label for="addInput">新增项：</label>
+                <input
+                    type="text"
+                    id="addInput"
+                    @input="handleInput"
+                />
+            </div>
+            <button>提交</button>
+        </section>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+
+        }
+    },
+    methods: {
+        // 事件处理函数
+        handleInput(e) {
+            console.log(e.target.value)
+        },
+    },
+    computed: {},
+    watch: {},
+    created() { },
+}
+</script>
+
+<style lang="scss" scoped>
+// 项目外框
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+    background-color: #333333;
+
+    // 项目标题
+    h1 {
+        flex: 1;
+        font-size: 48px;
+        margin: 20px 0;
+    }
+
+    // 项目输入部分
+    .input-section {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        box-sizing: border-box;
+
+        // 新增项输入框
+        .add-input {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            // 输入框标签
+            label {
+                margin-right: 10px;
+                font-size: 36px;
+            }
+
+            // 输入框
+            input {
+                width: 360px;
+                height: 36px;
+                padding: 0 10px;
+                font-size: 24px;
+            }
+        }
+
+        // 提交按钮
+        button {
+            width: 120px;
+            height: 36px;
+            margin-top: 20px;
+            font-size: 24px;
+            background-color: #409EFF;
+            color: white;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-sizing: content-box;
+
+            // 鼠标以上样式
+            &:hover {
+                background-color: #C6E2FF;
+            }
+        }
+    }
+}
+</style>
+```
+
+​    <b>经过以上书写过后并使用命令行启动项目, 就会得到下方的页面.</b> 
+
+<img src="./img/isInput.png" />
+
+​    <b>接下来我们进行输入测试. 先测试数字 ( Number ) 类型</b> 
+
+<img src="./img/inputNumber.png" />
+
+​    <b>发现可以正常通过 input 元素输入触发 methods 函数属性中的 handleInput 函数, 并成功输出到控制台. 接下来测试 字符串 ( String ) 类型中的 Letter ( 字母 ).</b> 
+
+<img src="./img/inputLetter.png" />
+
+​    <b>通过以上发现感觉看着运行的还不错, 但很快就能发现一个问题, 那如果我还是输入一个 String ( 字符串 ) 类型的内容, 但我这次不输入字母了, 而是输入拼音会发生什么?</b> 
+
+<img src="./img/inputChinese.png" />
+
+​    <b>我们发现这样的话就发生只要输入就会触发事件, 由于中文拼音的缘故, 所以不能像英美那样去进行 input 事件. 这时就要设置: <i>compositionstart 事件</i> 和 <i>compositionend 事件</i> 这两个属性是在拼写状态下, 检查是否为组合成字符的属性, start 是开始组合, 直到组合结束会触发 end 结束事件. 那么为了可以使中文也能正常拼写显示, 所以将上方代码进行更改:</b>  
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>Index 页面</h1>
+        <section class="input-section">
+            <div class="add-input">
+                <label for="addInput">新增项：</label>
+                <input
+                    type="text"
+                    id="addInput"
+                    @input="handleInput"
+                    @compositionstart="isLock = true"
+                    @compositionend="isLock = false; handleInput($event)"
+                />
+            </div>
+            <button>提交</button>
+        </section>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            isLock: false, // 判断是否为输入状态的一个锁
+        }
+    },
+    methods: {
+        // 事件处理函数
+        handleInput(e) {
+            if (!this.isLock) console.log(e.target.value)
+        },
+    },
+    computed: {},
+    watch: {},
+    created() { },
+}
+</script>
+
+<style lang="scss" scoped>
+// 项目外框
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+    background-color: #333333;
+
+    // 项目标题
+    h1 {
+        flex: 1;
+        font-size: 48px;
+        margin: 20px 0;
+    }
+
+    // 项目输入部分
+    .input-section {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        box-sizing: border-box;
+
+        // 新增项输入框
+        .add-input {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            // 输入框标签
+            label {
+                margin-right: 10px;
+                font-size: 36px;
+            }
+
+            // 输入框
+            input {
+                width: 360px;
+                height: 36px;
+                padding: 0 10px;
+                font-size: 24px;
+            }
+        }
+
+        // 提交按钮
+        button {
+            width: 120px;
+            height: 36px;
+            margin-top: 20px;
+            font-size: 24px;
+            background-color: #409EFF;
+            color: white;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-sizing: content-box;
+
+            // 鼠标以上样式
+            &:hover {
+                background-color: #C6E2FF;
+            }
+        }
+    }
+}
+</style>
+```
+
+​    <b>完成以上修改后就可以再次进行拼音输入测试了, 现在我们开始正常输入:</b> 
+
+<img src="img/inputStart.png" />
+
+<img src="img/inputEnd.png" />
+
+​    <b>通过对控制台的观察, 我们发现它并没有对未拼写完成状态下的内容进行输出, 而是对最终输入完成的内容进行输出.</b> 
+
+### B. 同步表单
+
+​    <b>此处将对以上代码进行优化, 将输入的内容同步至 HTML 中, 并展示.</b> 
+
+#### 1. 伪同步
+
+​    <b>此处将使用 methods 函数方法对输入的内容进行同步, 虽然这并不是最优的解决方案. 具体做法就是将 input 元素通过 event 捕获当前触发事件元素, 并获取该元素的输入内容, 使用 e.target.value 对内容进行获取后, 并赋值到 data 中的 inputText 存储变量上, 最终在 HTML 中使用 `<textarea>{{ inputText }}</textarea>` 的方式进行展示.</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>Index 页面</h1>
+        <section class="input-section">
+            <div class="input-wins">
+                <div class="presentation-title">您输入的内容为:</div>
+                <textarea
+                    class="presentation-content"
+                    :readonly="true"
+                >{{ inputText }}</textarea>
+            </div>
+            <div class="add-input">
+                <label for="addInput">新增项：</label>
+                <input
+                    type="text"
+                    id="addInput"
+                    @input="handleInput"
+                    @compositionstart="isLock = true"
+                    @compositionend="isLock = false; handleInput($event)"
+                />
+            </div>
+            <button>提交</button>
+        </section>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            isLock: false,
+            inputText: '',
+        }
+    },
+    methods: {
+        // 事件处理函数
+        handleInput(e) {
+            if (!this.isLock) this.inputText = e.target.value;
+        },
+    },
+    computed: {},
+    watch: {},
+    created() { },
+}
+</script>
+
+<style lang="scss" scoped>
+// 项目外框
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+    background-color: #333333;
+
+    // 项目标题
+    h1 {
+        flex: 1;
+        font-size: 48px;
+        margin: 20px 0;
+    }
+
+    // 项目输入部分
+    .input-section {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        box-sizing: border-box;
+
+        // 用户输入展示
+        .input-wins {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 538px;
+            min-height: 47px;
+            overflow: hidden;
+            margin-bottom: 20px;
+
+            // 展示标题
+            .presentation-title {
+                width: 100%;
+                height: 47px;
+                font-size: 36px;
+                margin-bottom: 10px;
+            }
+
+            // 展示内容
+            .presentation-content {
+                width: 100%;
+                min-height: 360px;
+                font-size: 24px;
+                box-sizing: border-box;
+                padding: 10px;
+                outline: none;
+                resize: none;
+                border-radius: 8px;
+            }
+        }
+
+        // 新增项输入框
+        .add-input {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            // 输入框标签
+            label {
+                margin-right: 10px;
+                font-size: 36px;
+            }
+
+            // 输入框
+            input {
+                width: 360px;
+                height: 36px;
+                padding: 0 10px;
+                font-size: 24px;
+                outline: none;
+                border-radius: 8px;
+            }
+        }
+
+        // 提交按钮
+        button {
+            width: 120px;
+            height: 36px;
+            margin-top: 20px;
+            font-size: 24px;
+            background-color: #409EFF;
+            color: white;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-sizing: content-box;
+
+            // 鼠标以上样式
+            &:hover {
+                background-color: #C6E2FF;
+            }
+        }
+    }
+}
+</style>
+```
+
+​    <b>展示结果</b> 
+
+<img src="img/SynchronousInput.png" />
+
+#### 2. 问题 (1)
+
+​    <b>虽然现在可以进行同步了, 但很快我们就又发现了一个新的问题, 这里我们添加一个 "重置" 按钮.</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>Index 页面</h1>
+        <section class="input-section">
+            <div class="input-wins">
+                <div class="presentation-title">您输入的内容为:</div>
+                <textarea
+                    class="presentation-content"
+                    :readonly="true"
+                >{{ inputText }}</textarea>
+            </div>
+            <div class="add-input">
+                <label for="addInput">新增项：</label>
+                <input
+                    type="text"
+                    id="addInput"
+                    @input="handleInput"
+                    @compositionstart="isLock = true"
+                    @compositionend="isLock = false; handleInput($event)"
+                />
+            </div>
+            <section class="btn-section">
+                <button class="resetting"
+                    @click="resetAdd"
+                >重置</button>
+                <button class="submit">提交</button>
+            </section>
+        </section>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            isLock: false,
+            inputText: '',
+        }
+    },
+    methods: {
+        // 事件处理函数
+        handleInput(e) {
+            if (!this.isLock) this.inputText = e.target.value;
+        },
+        resetAdd() {
+            this.inputText = '';
+        },
+    },
+    computed: {},
+    watch: {},
+    created() { },
+}
+</script>
+
+<style lang="scss" scoped>
+@import './../setColor.scss';
+
+// 项目外框
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+    background-color: #333333;
+
+    // 项目标题
+    h1 {
+        flex: 1;
+        font-size: 48px;
+        margin: 20px 0;
+    }
+
+    // 项目输入部分
+    .input-section {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        box-sizing: border-box;
+
+        // 用户输入展示
+        .input-wins {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 538px;
+            min-height: 47px;
+            overflow: hidden;
+            margin-bottom: 20px;
+
+            // 展示标题
+            .presentation-title {
+                width: 100%;
+                height: 47px;
+                font-size: 36px;
+                margin-bottom: 10px;
+            }
+
+            // 展示内容
+            .presentation-content {
+                width: 100%;
+                min-height: 360px;
+                font-size: 24px;
+                box-sizing: border-box;
+                padding: 10px;
+                outline: none;
+                resize: none;
+                border-radius: 8px;
+            }
+        }
+
+        // 新增项输入框
+        .add-input {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            // 输入框标签
+            label {
+                margin-right: 10px;
+                font-size: 36px;
+            }
+
+            // 输入框
+            input {
+                width: 360px;
+                height: 36px;
+                padding: 0 10px;
+                font-size: 24px;
+                outline: none;
+                border-radius: 8px;
+            }
+        }
+
+        .btn-section {
+
+
+            // 提交按钮
+            button {
+                width: 120px;
+                height: 36px;
+                margin-top: 20px;
+                font-size: 24px;
+                color: white;
+                padding: 4px 8px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                box-sizing: content-box;
+
+                // 除了: 最后一个按钮元素, 其余元素右边距20px
+                &:not(:last-child) {
+                    margin-right: 20px;
+                }
+
+                // 重置按钮样式
+                &.resetting {
+                    background-color: $bg-danger-base;
+
+                    // 鼠标移上样式
+                    &:hover {
+                        background-color: $bg-danger-dark;
+                    }
+                }
+
+                // 提交按钮样式
+                &.submit {
+                    background-color: $bg-brand-base;
+
+                    // 鼠标移上样式
+                    &:hover {
+                        background-color: $bg-brand-dark;
+                    }
+                }
+
+            }
+        }
+    }
+}
+</style>
+```
+
+​    <b>这时我们点击重置按钮, 就会发现一下问题.</b> 
+
+<img src="img/reseting.png" />
+
+<b>当我们点击按钮后问题就出来了, 它只重置了展示框的内容, 并没有对 Input 输入框产生效果.</b> 
+
+<img src="img/resetingClick.png" />
+
+<b>原因是 Input 输入框触发的是 @input 事件, 该事件只会将输入框中的内容同步到 data 存储数据属性中的 inputText 变量上, 再由 Vue 数据驱动视图的原则, 将 inputText 变量成功展示到带有 `{{ inputText }}` 的元素中. 所以将 inputText 清空后只会对使用该变量进行展示的视图产生影响, 而不会对 Input 输入框产生任何影响.</b> 
+
+#### 3. 解决 (1)
+
+​    <b>针对上方的问题需要将该元素进行绑定, 对 Input 元素使用 `:value="inputText"` 语法糖的方式或 `v-bind:value="inputText"` 全拼的方式进行数据绑定, 将 inputText 的值绑定到该元素上.</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>Index 页面</h1>
+        <section class="input-section">
+            <div class="input-wins">
+                <div class="presentation-title">您输入的内容为:</div>
+                <textarea
+                    class="presentation-content"
+                    :readonly="true"
+                >{{ inputText }}</textarea>
+            </div>
+            <div class="add-input">
+                <label for="addInput">新增项：</label>
+                <input
+                    type="text"
+                    id="addInput"
+                    @input="handleInput"
+                    @compositionstart="isLock = true"
+                    @compositionend="isLock = false; handleInput($event)"
+                    :value="inputText"
+                />
+            </div>
+            <section class="btn-section">
+                <button
+                    class="resetting"
+                    @click="resetAdd"
+                >重置</button>
+                <button class="submit">提交</button>
+            </section>
+        </section>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            isLock: false,
+            inputText: '',
+        }
+    },
+    methods: {
+        // 事件处理函数
+        handleInput(e) {
+            if (!this.isLock) this.inputText = e.target.value;
+        },
+        resetAdd() {
+            this.inputText = '';
+        },
+    },
+    computed: {},
+    watch: {},
+    created() { },
+}
+</script>
+
+<style lang="scss" scoped>
+@import './../setColor.scss';
+
+// 项目外框
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+    background-color: #333333;
+
+    // 项目标题
+    h1 {
+        flex: 1;
+        font-size: 48px;
+        margin: 20px 0;
+    }
+
+    // 项目输入部分
+    .input-section {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        box-sizing: border-box;
+
+        // 用户输入展示
+        .input-wins {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 538px;
+            min-height: 47px;
+            overflow: hidden;
+            margin-bottom: 20px;
+
+            // 展示标题
+            .presentation-title {
+                width: 100%;
+                height: 47px;
+                font-size: 36px;
+                margin-bottom: 10px;
+            }
+
+            // 展示内容
+            .presentation-content {
+                width: 100%;
+                min-height: 360px;
+                font-size: 24px;
+                box-sizing: border-box;
+                padding: 10px;
+                outline: none;
+                resize: none;
+                border-radius: 8px;
+            }
+        }
+
+        // 新增项输入框
+        .add-input {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            // 输入框标签
+            label {
+                margin-right: 10px;
+                font-size: 36px;
+            }
+
+            // 输入框
+            input {
+                width: 360px;
+                height: 36px;
+                padding: 0 10px;
+                font-size: 24px;
+                outline: none;
+                border-radius: 8px;
+            }
+        }
+
+        .btn-section {
+
+
+            // 提交按钮
+            button {
+                width: 120px;
+                height: 36px;
+                margin-top: 20px;
+                font-size: 24px;
+                color: white;
+                padding: 4px 8px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                box-sizing: content-box;
+
+                // 除了: 最后一个按钮元素, 其余元素右边距20px
+                &:not(:last-child) {
+                    margin-right: 20px;
+                }
+
+                // 重置按钮样式
+                &.resetting {
+                    background-color: $bg-danger-base;
+
+                    // 鼠标移上样式
+                    &:hover {
+                        background-color: $bg-danger-dark;
+                    }
+                }
+
+                // 提交按钮样式
+                &.submit {
+                    background-color: $bg-brand-base;
+
+                    // 鼠标移上样式
+                    &:hover {
+                        background-color: $bg-brand-dark;
+                    }
+                }
+
+            }
+        }
+    }
+}
+</style>
+```
+
+<b>这里再次输入 "Hello World", 并点击 "重置" 按钮</b> 
+
+<img src="img/reseting.png" />
+
+<b>点击按钮后发现: 全部都被重置.</b> 
+
+<img src="img/resetingClickBind.png" />
+
+<b>原因是: 两项都被以不同形式绑定了 inputText 变量, 所以后期点击重置后两个框内的内容都被清空了. 这也是 Vue 数据驱动视图的好处.</b> 
+
+### C. v-modle 数据绑定
+
+​    <b>在上面我们虽然实现了数据的绑定, 但还是过于繁琐且会出现一些其他问题. 介于以上问题 Vue 官方提供了一个更方便的属性: `v-modle=""` 属性. 可用于实现数据的双向绑定.</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>Index 页面</h1>
+        <section class="input-section">
+            <div class="input-wins">
+                <div class="presentation-title">您输入的内容为:</div>
+                <textarea
+                    class="presentation-content"
+                    :readonly="true"
+                >{{ inputText }}</textarea>
+            </div>
+            <div class="add-input">
+                <label for="addInput">新增项：</label>
+                <input
+                    type="text"
+                    id="addInput"
+                    v-model="inputText"
+                />
+            </div>
+            <section class="btn-section">
+                <button
+                    class="resetting"
+                    @click="resetAdd"
+                >重置</button>
+                <button class="submit">提交</button>
+            </section>
+        </section>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            isLock: false,
+            inputText: '',
+        }
+    },
+    methods: {
+        resetAdd() {
+            this.inputText = '';
+        },
+    },
+    computed: {},
+    watch: {},
+    created() { },
+}
+</script>
+
+<style lang="scss" scoped>
+@import './../setColor.scss';
+
+// 项目外框
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+    background-color: #333333;
+
+    // 项目标题
+    h1 {
+        flex: 1;
+        font-size: 48px;
+        margin: 20px 0;
+    }
+
+    // 项目输入部分
+    .input-section {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        box-sizing: border-box;
+
+        // 用户输入展示
+        .input-wins {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 538px;
+            min-height: 47px;
+            overflow: hidden;
+            margin-bottom: 20px;
+
+            // 展示标题
+            .presentation-title {
+                width: 100%;
+                height: 47px;
+                font-size: 36px;
+                margin-bottom: 10px;
+            }
+
+            // 展示内容
+            .presentation-content {
+                width: 100%;
+                min-height: 360px;
+                font-size: 24px;
+                box-sizing: border-box;
+                padding: 10px;
+                outline: none;
+                resize: none;
+                border-radius: 8px;
+            }
+        }
+
+        // 新增项输入框
+        .add-input {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            // 输入框标签
+            label {
+                margin-right: 10px;
+                font-size: 36px;
+            }
+
+            // 输入框
+            input {
+                width: 360px;
+                height: 36px;
+                padding: 0 10px;
+                font-size: 24px;
+                outline: none;
+                border-radius: 8px;
+            }
+        }
+
+        .btn-section {
+
+
+            // 提交按钮
+            button {
+                width: 120px;
+                height: 36px;
+                margin-top: 20px;
+                font-size: 24px;
+                color: white;
+                padding: 4px 8px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                box-sizing: content-box;
+
+                // 除了: 最后一个按钮元素, 其余元素右边距20px
+                &:not(:last-child) {
+                    margin-right: 20px;
+                }
+
+                // 重置按钮样式
+                &.resetting {
+                    background-color: $bg-danger-base;
+
+                    // 鼠标移上样式
+                    &:hover {
+                        background-color: $bg-danger-dark;
+                    }
+                }
+
+                // 提交按钮样式
+                &.submit {
+                    background-color: $bg-brand-base;
+
+                    // 鼠标移上样式
+                    &:hover {
+                        background-color: $bg-brand-dark;
+                    }
+                }
+
+            }
+        }
+    }
+}
+</style>
+```
+
+​    <b>此处使用了 `v-modle` 属性, 并将它绑定的目标设置为: "inputText" 变量, 再将 methods 函数属性中的 handleInput 函数删除. 且功能也并没有出现任何问题, 依旧可以正常运行.</b> 
+
+#### 1. smmary 总结
+
+​    <b>使用 `v-model` 双向绑定可以将: <span style="color: #E6A23C; text-decoration: underline;">输入框</span> 与 <span style="color: #E6A23C; text-decoration: underline;">data 中的数据</span> 进行绑定, 且大大节省了使用 @input 和 `bind:value=""` 的代码量.</b>
+
+### D. 绑定表单控件
+
+​    <b>上方提供了一个新的 `v-modle` 绑定属性, 那么这里来看一下它除了可以对输入框的内容进行绑定外还能做些什么...</b> 
+
+#### 1. 绑定单选框
+
+​    <b>该部分将对单选框进行绑定.</b> 
+
