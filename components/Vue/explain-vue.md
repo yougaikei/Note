@@ -2946,3 +2946,1600 @@ export default {
 
 ​    <b>该部分将对单选框进行绑定.</b> 
 
+```vue
+<template>
+  <div class="index-project">
+    <h1>Index</h1>
+    <section class="wins-container">
+      <!-- 输入容器 -->
+      <div class="input-container">
+        <!-- 输入框: 用户名 -->
+        <div class="user-name">
+          <label for="inputText">用户名:</label>
+          <input type="text" id="inputText" v-model="inputText" />
+        </div>
+
+        <!-- 单选框: 性别 -->
+        <div class="user-gender">
+          <label for="user-gender">性&emsp;别:</label>
+          <div>
+            <input
+              type="radio"
+              name="user-gender"
+              id="userGenderMan"
+              value="male"
+              v-model="activeGender"
+              checked
+            />
+            <label for="userGenderMan">男</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="user-gender"
+              id="userGenderWoman"
+              value="female"
+              v-model="activeGender"
+            />
+            <label for="userGenderWoman">女</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 输出容器 -->
+      <div class="out-container">
+        <p>你输入的用户名是: {{ inputText }}</p>
+        <p>你选择的性别是: {{ genderToStr }}</p>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "index",
+  data() {
+    return {
+      inputText: "",
+      activeGender: "",
+    };
+  },
+  methods: {},
+  computed: {
+    // Gender to String 男性 : 女性
+    genderToStr() {
+      if (this.activeGender === "") this.activeGender = "male";
+      let that = this.activeGender === "male" ? "男性" : "女性";
+      return that;
+    },
+  },
+  watch: {},
+  created() {},
+};
+</script>
+
+<style lang="scss" scoped>
+@import "./../setColor.scss";
+
+// 根元素 index
+.index-project {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  color: #fff;
+  background-color: #333;
+
+  // 标题元素
+  h1 {
+    flex: 1;
+    font-size: 48px;
+  }
+
+  // 分屏元素
+  .wins-container {
+    flex: 9;
+    display: flex;
+    width: 100%;
+
+    // 设置总样式
+    & > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 50%;
+      height: 100%;
+    }
+
+    // 设置输入容器样式
+    .input-container {
+      font-size: 24px;
+
+      // 设置用户名样式
+      .user-name {
+        display: flex;
+
+        // 设置直属 label 元素: 性别标题样式
+        & > label {
+          width: 80px;
+        }
+
+        // 设置输入框的样式
+        input {
+          width: 240px;
+          font-size: 24px;
+          margin-left: 10px;
+          padding: 6px;
+          border-radius: 6px;
+          outline: none;
+          border: none;
+        }
+      }
+
+      // 设置性别单选框的样式
+      .user-gender {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 330px;
+        margin-top: 24px;
+
+        & > label {
+          width: 80px;
+          margin-right: 10px;
+        }
+
+        // 设置单选框的样式
+        input {
+          width: 20px;
+          height: 20px;
+          outline: none;
+          border: none;
+        }
+
+        // 设置性别组容器
+        div {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 120px;
+        }
+      }
+    }
+
+    // 设置输出容器样式
+    .out-container {
+      font-size: 24px;
+
+      & > p:not(:last-child) {
+        margin-bottom: 24px;
+      }
+    }
+  }
+}
+</style>
+
+```
+
+​    <b>通过使用 v-modle 属性对 Input 单选框 与 data 数据中的 activeGender 变量 进行绑定, 为了方便用户点击, 将 "男", "女" 两个选项分别打包, 并在 Input 标签上使用 id 属性以便于后方的 Label 标签与其进行捆绑操作 ( , 捆绑后用户可以点击对应的文字也会触发单选框的 checked  选中效果 ), 如图所示.</b> 
+
+<img src="img/activeGender.png" />
+
+#### 2. 绑定多选框
+
+​    <b>本部分将对复选框进行绑定操作</b> 
+
+```vue
+<template>
+  <div class="index-project">
+    <h1>Index</h1>
+    <section class="wins-container">
+      <!-- 输入容器 -->
+      <div class="input-container">
+        <!-- 输入框: 用户名 -->
+        <div class="user-name">
+          <label for="inputText">用户名:</label>
+          <input type="text" id="inputText" v-model="inputText" />
+        </div>
+
+        <!-- 单选框: 性别 -->
+        <div class="user-gender">
+          <label for="user-gender">性&emsp;别:</label>
+          <div>
+            <input
+              type="radio"
+              name="user-gender"
+              id="userGenderMan"
+              value="male"
+              v-model="activeGender"
+              checked
+            />
+            <label for="userGenderMan">男</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="user-gender"
+              id="userGenderWoman"
+              value="female"
+              v-model="activeGender"
+            />
+            <label for="userGenderWoman">女</label>
+          </div>
+        </div>
+
+        <!-- 多选框: 兴趣 -->
+        <div class="user-interest">
+          <label for="user-interest">兴&emsp;趣:</label>
+          <!-- 兴趣容器 -->
+          <div class="interest-container">
+            <!-- 足球 -->
+            <div class="football">
+              <input
+                type="checkbox"
+                name="user-interest"
+                id="userInterestFootball"
+                value="football"
+                v-model="activeInterest"
+              />
+              <label for="userInterestFootball">足球</label>
+            </div>
+
+            <!-- 台球 -->
+            <div class="billiards">
+              <input
+                type="checkbox"
+                name="user-interest"
+                id="userInterestBilliards"
+                value="billiards"
+                v-model="activeInterest"
+              />
+              <label for="userInterestBilliards">台球</label>
+            </div>
+
+            <!-- 篮球 -->
+            <div class="basketball">
+              <input
+                type="checkbox"
+                name="user-interest"
+                id="userInterestBasketball"
+                value="basketball"
+                v-model="activeInterest"
+              />
+              <label for="userInterestBasketball">篮球</label>
+            </div>
+
+            <!-- 棒球 -->
+            <div class="baseball">
+              <input
+                type="checkbox"
+                name="user-interest"
+                id="userInterestBaseball"
+                value="baseball"
+                v-model="activeInterest"
+              />
+              <label for="userInterestBaseball">棒球</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 输出容器 -->
+      <div class="out-container">
+        <p>你输入的用户名是: {{ inputText }}</p>
+        <p>你选择的性别是: {{ genderToStr }}</p>
+        <p>你选择的兴趣是: {{ interestToStr }}</p>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "index",
+  data() {
+    return {
+      inputText: "",
+      activeGender: "",
+      activeInterest: [],
+    };
+  },
+  methods: {},
+  computed: {
+    // Gender to String 男性 : 女性
+    genderToStr() {
+      if (this.activeGender === "") this.activeGender = "male";
+      let that = this.activeGender === "male" ? "男性" : "女性";
+      return that;
+    },
+    // Interest to String
+    interestToStr() {
+      // 创建一个临时存储变量
+      let that = "";
+      // 遍历 activeInterest 数组
+      this.activeInterest.forEach((item) => {
+        // 使用 switch 语句判断 item 的值
+        switch(item){
+          case "football":
+            that += "足球";
+            break;
+          case "billiards":
+            that += "台球";
+            break;
+          case "basketball":
+            that += "篮球";
+            break;
+          case "baseball":
+            that += "棒球";
+            break;
+          default:
+            break;
+        }
+
+        // 除了最后一个元素, 其他元素后面都要加 "、"
+        if (item !== this.activeInterest[this.activeInterest.length - 1]) {
+          that += "、";
+        }
+      });
+
+      // 返回最终结果
+      return that;
+    },
+  },
+  watch: {},
+  created() {},
+};
+</script>
+
+<style lang="scss" scoped>
+@import "./../setColor.scss";
+
+// 根元素 index
+.index-project {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  color: #fff;
+  background-color: #333;
+
+  // 标题元素
+  h1 {
+    flex: 1;
+    font-size: 48px;
+  }
+
+  // 分屏元素
+  .wins-container {
+    flex: 9;
+    display: flex;
+    width: 100%;
+
+    // 设置总样式
+    & > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 50%;
+      height: 100%;
+    }
+
+    // 设置输入容器样式
+    .input-container {
+      font-size: 24px;
+
+      // 设置用户名样式
+      .user-name {
+        display: flex;
+
+        // 设置直属 label 元素: 性别标题样式
+        & > label {
+          width: 80px;
+        }
+
+        // 设置输入框的样式
+        input {
+          width: 240px;
+          font-size: 24px;
+          margin-left: 10px;
+          padding: 6px;
+          border-radius: 6px;
+          outline: none;
+          border: none;
+        }
+      }
+
+      // 设置性别单选框的样式
+      .user-gender {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 330px;
+        margin-top: 24px;
+
+        & > label {
+          width: 80px;
+          margin-right: 10px;
+        }
+
+        // 设置单选框的样式
+        input {
+          width: 20px;
+          height: 20px;
+          outline: none;
+          border: none;
+          margin-right: 10px;
+        }
+
+        // 设置性别组容器
+        div {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 120px;
+        }
+      }
+
+      // 设置兴趣多选框的样式
+      .user-interest {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 330px;
+        margin-top: 24px;
+
+        & > label {
+          width: 80px;
+          margin-right: 10px;
+        }
+
+        // 设置兴趣容器样式
+        .interest-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 240px;
+
+          // 设置所有的兴趣样式
+          & > div {
+            display: flex;
+            align-items: center;
+
+            // 设置内部的多选框样式
+            input {
+              width: 20px;
+              height: 20px;
+              outline: none;
+              border: none;
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+    }
+
+    // 设置输出容器样式
+    .out-container {
+      font-size: 24px;
+
+      & > p:not(:last-child) {
+        margin-bottom: 24px;
+      }
+    }
+  }
+}
+</style>
+
+```
+
+​    <b>通过使用 v-modle 属性对 Input 复选框 与 data 数据中的 activeInterest 变量 进行绑定. 为了方便用户选中依旧采取学习单选框时讲解的方法进行捆绑操作. 完成后如图所示.</b>
+
+<img src="img/activeInterest.png" />
+
+#### 3. 绑定下拉菜单
+
+​    <b>接下来将对下拉菜单进行绑定操作</b> 
+
+```vue
+<template>
+  <div class="index-project">
+    <h1>Index</h1>
+    <section class="wins-container">
+      <!-- 输入容器 -->
+      <div class="input-container">
+        <!-- 输入框: 用户名 -->
+        <div class="user-name">
+          <label for="inputText">用户名:</label>
+          <input type="text" id="inputText" v-model="inputText" />
+        </div>
+
+        <!-- 单选框: 性别 -->
+        <div class="user-gender">
+          <label for="user-gender">性&emsp;别:</label>
+          <div>
+            <input
+              type="radio"
+              name="user-gender"
+              id="userGenderMan"
+              value="male"
+              v-model="activeGender"
+              checked
+            />
+            <label for="userGenderMan">男</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="user-gender"
+              id="userGenderWoman"
+              value="female"
+              v-model="activeGender"
+            />
+            <label for="userGenderWoman">女</label>
+          </div>
+        </div>
+
+        <!-- 多选框: 兴趣 -->
+        <div class="user-interest">
+          <label for="user-interest">兴&emsp;趣:</label>
+          <!-- 兴趣容器 -->
+          <div class="interest-container">
+            <!-- 足球 -->
+            <div class="football">
+              <input
+                type="checkbox"
+                name="user-interest"
+                id="userInterestFootball"
+                value="football"
+                v-model="activeInterest"
+              />
+              <label for="userInterestFootball">足球</label>
+            </div>
+
+            <!-- 台球 -->
+            <div class="billiards">
+              <input
+                type="checkbox"
+                name="user-interest"
+                id="userInterestBilliards"
+                value="billiards"
+                v-model="activeInterest"
+              />
+              <label for="userInterestBilliards">台球</label>
+            </div>
+
+            <!-- 篮球 -->
+            <div class="basketball">
+              <input
+                type="checkbox"
+                name="user-interest"
+                id="userInterestBasketball"
+                value="basketball"
+                v-model="activeInterest"
+              />
+              <label for="userInterestBasketball">篮球</label>
+            </div>
+
+            <!-- 棒球 -->
+            <div class="baseball">
+              <input
+                type="checkbox"
+                name="user-interest"
+                id="userInterestBaseball"
+                value="baseball"
+                v-model="activeInterest"
+              />
+              <label for="userInterestBaseball">棒球</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 下拉菜单: 职业 -->
+        <div class="user-profession">
+          <label for="user-profession">职&emsp;业:</label>
+          <select
+            name="user-profession"
+            id="user-profession"
+            v-model="activeProfession"
+          >
+            <option value="student" label="学生" selected>学生</option>
+            <option value="teacher">老师</option>
+            <option value="doctor">医生</option>
+            <option value="engineer">工程师</option>
+            <option value="other">其他</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 输出容器 -->
+      <div class="out-container">
+        <p>你输入的用户名是: {{ inputText }}</p>
+        <p>你选择的性别是: {{ genderToStr }}</p>
+        <p>你选择的兴趣是: {{ interestToStr }}</p>
+        <p>你选择的职业是: {{ professionToStr }}</p>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "index",
+  data() {
+    return {
+      inputText: "",
+      activeGender: "",
+      activeInterest: [],
+      activeProfession: "",
+    };
+  },
+  methods: {},
+  computed: {
+    // Gender to String 男性 : 女性
+    genderToStr() {
+      if (this.activeGender === "") this.activeGender = "male";
+      let that = this.activeGender === "male" ? "男性" : "女性";
+      return that;
+    },
+    // Interest to String
+    interestToStr() {
+      // 创建一个临时存储变量
+      let that = "";
+      // 遍历 activeInterest 数组
+      this.activeInterest.forEach((item) => {
+        // 使用 switch 语句判断 item 的值
+        switch (item) {
+          case "football":
+            that += "足球";
+            break;
+          case "billiards":
+            that += "台球";
+            break;
+          case "basketball":
+            that += "篮球";
+            break;
+          case "baseball":
+            that += "棒球";
+            break;
+          default:
+            break;
+        }
+
+        // 除了最后一个元素, 其他元素后面都要加 "、"
+        if (item !== this.activeInterest[this.activeInterest.length - 1]) {
+          that += "、";
+        }
+      });
+
+      // 返回最终结果
+      return that;
+    },
+    // Profession to String
+    professionToStr() {
+      if (this.activeProfession === "") this.activeProfession = "student";
+      let that = "";
+      switch (this.activeProfession) {
+        case "student":
+          that = "学生";
+          break;
+        case "teacher":
+          that = "老师";
+          break;
+        case "doctor":
+          that = "医生";
+          break;
+        case "engineer":
+          that = "工程师";
+          break;
+        case "other":
+          that = "其他";
+          break;
+        default:
+          break;
+      }
+      return that;
+    },
+  },
+  watch: {},
+  created() {},
+};
+</script>
+
+<style lang="scss" scoped>
+@import "./../setColor.scss";
+
+// 复用样式
+%input {
+  width: 20px;
+  height: 20px;
+  outline: none;
+  border: none;
+  margin-right: 10px;
+}
+
+// 根元素 index
+.index-project {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  color: #fff;
+  background-color: #333;
+
+  // 标题元素
+  h1 {
+    flex: 1;
+    font-size: 48px;
+  }
+
+  // 分屏元素
+  .wins-container {
+    flex: 9;
+    display: flex;
+    width: 100%;
+
+    // 设置总样式
+    & > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 50%;
+      height: 100%;
+    }
+
+    // 设置输入容器样式
+    .input-container {
+      font-size: 24px;
+
+      // 设置用户名样式
+      .user-name {
+        display: flex;
+
+        // 设置直属 label 元素: 性别标题样式
+        & > label {
+          width: 80px;
+        }
+
+        // 设置输入框的样式
+        input {
+          width: 240px;
+          font-size: 24px;
+          margin-left: 10px;
+          padding: 6px;
+          border-radius: 6px;
+          outline: none;
+          border: none;
+        }
+      }
+
+      // 设置性别单选框的样式
+      .user-gender {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 330px;
+        margin-top: 24px;
+
+        & > label {
+          width: 80px;
+          margin-right: 10px;
+        }
+
+        // 设置单选框的样式
+        input {
+          // 引用复用样式
+          @extend %input;
+        }
+
+        // 设置性别组容器
+        div {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 120px;
+        }
+      }
+
+      // 设置兴趣多选框的样式
+      .user-interest {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 330px;
+        margin-top: 24px;
+
+        & > label {
+          width: 80px;
+          margin-right: 10px;
+        }
+
+        // 设置兴趣容器样式
+        .interest-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 240px;
+
+          // 设置所有的兴趣样式
+          & > div {
+            display: flex;
+            align-items: center;
+
+            // 设置内部的多选框样式
+            input {
+              // 引用复用样式
+              @extend %input;
+            }
+          }
+        }
+      }
+
+      // 设置职业下拉框的样式
+      .user-profession {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 330px;
+        margin-top: 24px;
+
+        & > label {
+          width: 80px;
+          margin-right: 10px;
+        }
+
+        // 设置下拉框的样式
+        select {
+          width: 240px;
+          font-size: 24px;
+          padding: 6px;
+          outline: none;
+          border: none;
+          background-color: lighten(#000000, 50%);
+          color: #fff;
+
+          // 设置下拉框的选项样式
+          option {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            outline: none;
+          }
+        }
+      }
+    }
+
+    // 设置输出容器样式
+    .out-container {
+      font-size: 24px;
+
+      & > p:not(:last-child) {
+        margin-bottom: 24px;
+      }
+    }
+  }
+}
+</style>
+
+```
+
+​    <b>做法与上方的单、复选框如出一辙, 只是将 `v-modle` 属性放到了 Select 下拉菜单上.</b> 
+
+<img src="img/activeProfession.png" />
+
+#### 4. 绑定文本框
+
+​    <b>本小节将对 text area 元素使用: `v-modle` 进行双向绑定.</b>
+
+```vue
+<template>
+  <div class="index-project">
+    <h1>Index</h1>
+    <section class="wins-container">
+      <!-- 输入容器 -->
+      <div class="input-container">
+        <!-- 输入框: 用户名 -->
+        <div class="user-name">
+          <label for="inputText">用户名:</label>
+          <input type="text" id="inputText" v-model="inputText" />
+        </div>
+
+        <!-- 单选框: 性别 -->
+        <div class="user-gender">
+          <label for="user-gender">性&emsp;别:</label>
+          <div>
+            <input
+              type="radio"
+              name="user-gender"
+              id="userGenderMan"
+              value="male"
+              v-model="activeGender"
+              checked
+            />
+            <label for="userGenderMan">男</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="user-gender"
+              id="userGenderWoman"
+              value="female"
+              v-model="activeGender"
+            />
+            <label for="userGenderWoman">女</label>
+          </div>
+        </div>
+
+        <!-- 多选框: 兴趣 -->
+        <div class="user-interest">
+          <label for="user-interest">兴&emsp;趣:</label>
+          <!-- 兴趣容器 -->
+          <div class="interest-container">
+            <!-- 足球 -->
+            <div class="football">
+              <input
+                type="checkbox"
+                name="user-interest"
+                id="userInterestFootball"
+                value="football"
+                v-model="activeInterest"
+              />
+              <label for="userInterestFootball">足球</label>
+            </div>
+
+            <!-- 台球 -->
+            <div class="billiards">
+              <input
+                type="checkbox"
+                name="user-interest"
+                id="userInterestBilliards"
+                value="billiards"
+                v-model="activeInterest"
+              />
+              <label for="userInterestBilliards">台球</label>
+            </div>
+
+            <!-- 篮球 -->
+            <div class="basketball">
+              <input
+                type="checkbox"
+                name="user-interest"
+                id="userInterestBasketball"
+                value="basketball"
+                v-model="activeInterest"
+              />
+              <label for="userInterestBasketball">篮球</label>
+            </div>
+
+            <!-- 棒球 -->
+            <div class="baseball">
+              <input
+                type="checkbox"
+                name="user-interest"
+                id="userInterestBaseball"
+                value="baseball"
+                v-model="activeInterest"
+              />
+              <label for="userInterestBaseball">棒球</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 下拉菜单: 职业 -->
+        <div class="user-profession">
+          <label for="user-profession">职&emsp;业:</label>
+          <select
+            name="user-profession"
+            id="user-profession"
+            v-model="activeProfession"
+          >
+            <option value="student" label="学生" selected>学生</option>
+            <option value="teacher">老师</option>
+            <option value="doctor">医生</option>
+            <option value="engineer">工程师</option>
+            <option value="other">其他</option>
+          </select>
+        </div>
+
+        <!-- 文本框: 自我介绍 -->
+        <div class="user-introduction">
+          <label for="user-introduction">自我介绍:</label>
+          <textarea
+            name="user-introduction"
+            id="user-introduction"
+            cols="30"
+            rows="10"
+            v-model="introductionText"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- 输出容器 -->
+      <div class="out-container">
+        <p>你输入的用户名是: {{ inputText }}</p>
+        <p>你选择的性别是: {{ genderToStr }}</p>
+        <p>你选择的兴趣是: {{ interestToStr }}</p>
+        <p>你选择的职业是: {{ professionToStr }}</p>
+        <p>你输入的自我介绍是: {{ introductionText }}</p>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "index",
+  data() {
+    return {
+      inputText: "",
+      activeGender: "",
+      activeInterest: [],
+      activeProfession: "",
+      introductionText: "",
+    };
+  },
+  methods: {},
+  computed: {
+    // Gender to String 男性 : 女性
+    genderToStr() {
+      if (this.activeGender === "") this.activeGender = "male";
+      let that = this.activeGender === "male" ? "男性" : "女性";
+      return that;
+    },
+    // Interest to String
+    interestToStr() {
+      // 创建一个临时存储变量
+      let that = "";
+      // 遍历 activeInterest 数组
+      this.activeInterest.forEach((item) => {
+        // 使用 switch 语句判断 item 的值
+        switch (item) {
+          case "football":
+            that += "足球";
+            break;
+          case "billiards":
+            that += "台球";
+            break;
+          case "basketball":
+            that += "篮球";
+            break;
+          case "baseball":
+            that += "棒球";
+            break;
+          default:
+            break;
+        }
+
+        // 除了最后一个元素, 其他元素后面都要加 "、"
+        if (item !== this.activeInterest[this.activeInterest.length - 1]) {
+          that += "、";
+        }
+      });
+
+      // 返回最终结果
+      return that;
+    },
+    // Profession to String
+    professionToStr() {
+      if (this.activeProfession === "") this.activeProfession = "student";
+      let that = "";
+      switch (this.activeProfession) {
+        case "student":
+          that = "学生";
+          break;
+        case "teacher":
+          that = "老师";
+          break;
+        case "doctor":
+          that = "医生";
+          break;
+        case "engineer":
+          that = "工程师";
+          break;
+        case "other":
+          that = "其他";
+          break;
+        default:
+          break;
+      }
+      return that;
+    },
+  },
+  watch: {},
+  created() {},
+};
+</script>
+
+<style lang="scss" scoped>
+@import "./../setColor.scss";
+
+// 复用样式
+%input {
+  width: 20px;
+  height: 20px;
+  outline: none;
+  border: none;
+  margin-right: 10px;
+}
+
+// 根元素 index
+.index-project {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  color: #fff;
+  background-color: #333;
+
+  // 标题元素
+  h1 {
+    flex: 1;
+    font-size: 48px;
+  }
+
+  // 分屏元素
+  .wins-container {
+    flex: 9;
+    display: flex;
+    width: 100%;
+
+    // 设置总样式
+    & > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 50%;
+      height: 100%;
+    }
+
+    // 设置输入容器样式
+    .input-container {
+      font-size: 24px;
+
+      // 设置用户名样式
+      .user-name {
+        display: flex;
+
+        // 设置直属 label 元素: 性别标题样式
+        & > label {
+          width: 80px;
+        }
+
+        // 设置输入框的样式
+        input {
+          width: 240px;
+          font-size: 24px;
+          margin-left: 10px;
+          padding: 6px;
+          border-radius: 6px;
+          outline: none;
+          border: none;
+        }
+      }
+
+      // 设置性别单选框的样式
+      .user-gender {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 330px;
+        margin-top: 24px;
+
+        & > label {
+          width: 80px;
+          margin-right: 10px;
+        }
+
+        // 设置单选框的样式
+        input {
+          // 引用复用样式
+          @extend %input;
+        }
+
+        // 设置性别组容器
+        div {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 120px;
+        }
+      }
+
+      // 设置兴趣多选框的样式
+      .user-interest {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 330px;
+        margin-top: 24px;
+
+        & > label {
+          width: 80px;
+          margin-right: 10px;
+        }
+
+        // 设置兴趣容器样式
+        .interest-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 240px;
+
+          // 设置所有的兴趣样式
+          & > div {
+            display: flex;
+            align-items: center;
+
+            // 设置内部的多选框样式
+            input {
+              // 引用复用样式
+              @extend %input;
+            }
+          }
+        }
+      }
+
+      // 设置职业下拉框的样式
+      .user-profession {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 330px;
+        margin-top: 24px;
+
+        & > label {
+          width: 80px;
+          margin-right: 10px;
+        }
+
+        // 设置下拉框的样式
+        select {
+          width: 240px;
+          font-size: 24px;
+          padding: 6px;
+          outline: none;
+          border: none;
+          background-color: lighten(#000000, 50%);
+          color: #fff;
+
+          // 设置下拉框的选项样式
+          option {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            outline: none;
+          }
+        }
+      }
+
+      // 设置自我介绍的样式
+      .user-introduction {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 330px;
+        margin-top: 24px;
+
+        & > label {
+          width: 80px;
+          margin-right: 10px;
+        }
+
+        // 设置自我介绍的输入框样式
+        textarea {
+          width: 240px;
+          height: 120px;
+          font-size: 24px;
+          padding: 6px;
+          border-radius: 6px;
+          outline: none;
+          border: none;
+          resize: none;
+
+          // 隐藏文本框的滚动条
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
+      }
+    }
+
+    // 设置输出容器样式
+    .out-container {
+      font-size: 24px;
+
+      & > p:not(:last-child) {
+        margin-bottom: 24px;
+      }
+    }
+  }
+}
+</style>
+
+```
+
+​    <b>此处因与 Input 标签使用一致, 所以: 略. 展示效果如图所示.</b>
+
+<img src="img/introductionText.png" />
+
+### E. 内联样式
+
+​    <b>在 Vue 中可以对 style 属性进行绑定操作, 绑定后可以根据后期决定它内部的最终样式.</b>
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>Index</h1>
+        <div class="wins-container">
+            <!-- 普通样式 -->
+            <div style="width: 80vw; height: 45px; background-color: #409eff">
+                我是普通样式 style
+            </div>
+            <!-- 动态样式 -->
+            <div :style="dynamicStyle">我是动态样式 :style</div>
+
+            <!-- 单个动态属性 -->
+            <div
+                :style="{
+                    width,
+                    height,
+                    backgroundColor,
+                }"
+            >
+                我是单个动态属性 :style
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: "index",
+    data() {
+        return {
+            // 动态样式
+            dynamicStyle: {
+                width: "80vw",
+                height: "45px",
+                backgroundColor: "#67C23A",
+            },
+            // 单个属性
+            width: "80vw",
+            height: "45px",
+            backgroundColor: "#F56C6C",
+        };
+    },
+};
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: #fff;
+    background-color: #333;
+
+    h1 {
+        flex: 1;
+        font-size: 48px;
+    }
+
+    .wins-container {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+
+        & > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+
+            &:not(:last-child) {
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+</style>
+
+```
+
+   
+
+ <b>以上是基础用法, 还有进阶的用法, 操作如下:</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>Index</h1>
+        <div class="wins-container">
+            <!-- 普通样式 -->
+            <div style="width: 80vw; height: 45px; background-color: #409eff">
+                我是普通样式 style
+            </div>
+            <!-- 动态样式 -->
+            <div :style="dynamicStyle">我是动态样式 :style</div>
+
+            <!-- 单个动态属性 -->
+            <div
+                :style="{
+                    width,
+                    height,
+                    backgroundColor,
+                }"
+            >
+                我是单个动态属性 :style
+            </div>
+
+            <!-- 进阶用法 -->
+            <div class="advanced-container">
+                <div
+                    :style="{
+                        fontSize: fontSizeToStr,
+                    }"
+                    class="advanced-title"
+                >我是进阶用法</div>
+                <div class="btn-container">
+                    <button
+                        @click="addSize"
+                    >放&emsp;大</button>
+                    <button
+                        @click="reduceSize"
+                    >缩&emsp;小</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: "index",
+    data() {
+        return {
+            // 动态样式
+            dynamicStyle: {
+                width: "80vw",
+                height: "45px",
+                backgroundColor: "#67C23A",
+            },
+            // 单个属性
+            width: "80vw",
+            height: "45px",
+            backgroundColor: "#F56C6C",
+            // 进阶用法
+            handleFontSize: 24,
+        };
+    },
+    methods: {
+      addSize() {
+        if (this.handleFontSize < 100) {
+          this.handleFontSize += 2
+        } else {
+          console.log('已经最大了')
+        }
+      },
+      reduceSize() {
+        if (this.handleFontSize > 12) {
+          this.handleFontSize -= 2
+        } else {
+          console.log('已经最小了')
+        }
+      }
+    },
+    computed: {
+      // 将动态的 fontSize 样式转换为字符串 + px
+      fontSizeToStr() {
+        return this.handleFontSize + 'px'
+      }
+    }
+};
+</script>
+
+<style lang="scss" scoped>
+@import "./../setColor.scss";
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: #fff;
+    background-color: #333;
+
+    h1 {
+        flex: 1;
+        font-size: 48px;
+    }
+
+    .wins-container {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+
+        & > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+
+            &:not(:last-child) {
+                margin-bottom: 20px;
+            }
+
+            &.advanced-container {
+              display: flex;
+              flex-direction: column;
+
+              .advanced-title {
+                min-width: 80vw;
+                background-color: $bg-warning-base;
+                padding: 10px;
+                box-sizing: border-box;
+              }
+
+              .btn-container {
+                display: flex;
+
+                button {
+                  width: 180px;
+                  height: 45px;
+                  font-size: 24px;
+                  color: white;
+                  border: none;
+                  outline: none;
+                  margin-top: 20px;
+                  border-radius: 8px;
+                  cursor: pointer;
+
+                  &:not(:last-child) {
+                    margin-right: 20px;
+                  }
+
+                  &:first-child {
+                    background-color: $bg-success-base;
+                  }
+
+                  &:last-child {
+                    background-color: $bg-danger-base;
+                  }
+                }
+              }
+            }
+        }
+    }
+}
+</style>
+
+```
+
+<img src="img/handleFontSize.png" />
+
+​    <b>经过上述的方式可以通过点击控制 "进阶用法" 处的字体展示大小.</b> 
+
+### F. 类名控制 
+
+​    <b>此处将对元素的类名 ( class ) 属性进行控制.</b> 
+
+```vue
+```
+
+
+
