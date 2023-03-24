@@ -752,6 +752,8 @@ export default {
 
 ​    <b>以上就是 `v-for` 的全部用法了. 不难发现使用 Vue 和不使用的代码量, 使用 Vue 脚手架可以大幅减少程序员在开发过程中的书写量, 从而也可以更快的开发, 进而提升效率减少代码庸于.</b> 
 
+​    <b>需要注意的是在遍历 对象 或 数组 时需要使用 `:key` 属性, 进行区分. 在遍历对象时, 可以使用的参数有: 1. value 值; 2. key 键值名; 3. index 索引; 以上三个参数是需要按顺序排列的.</b>
+
 ### D. v-if 指令
 
 ​    <b>`v-if` 是用于控制 HTML 的组件是否呈现出来, 如果值为 "真 ( true )" 则加载, 否则则不加载. (真值: 1, true, 非空字符串; 假值: 0, false, undefined, null, "" )</b> 
@@ -1904,6 +1906,152 @@ export default {
 ​    <b style="color: #67C23A;">1. methods 可以在 watch 中调用且可以直接在 HTML 或 template 模板中使用, 而 watch 则不能被调用, 也不能直接在上述的 HTML 或 template 模板中使用.</b> 
 
 ​    <b style="color: #67C23A;">2. methods 函数属性的返回值比较自由, 可有可无. 但 watch 则默认负责处理比较耗时的操作, 且在操作完成后需要将值传递给需要的变量上, 不能将最终获取的值作为返回值进行返回. 但以上两个属性都可以为 data 数据的变化而进行对应的响应.</b> 
+
+#### 4. v-on 和 v-bind 进阶
+
+​    <b>在 vue 中 v-on 和 v-bind 除了以上介绍的方式也可以使用进阶形式的动态参数. 使用时需要在 data 数据属性中设置好对应的参数. 并在 HTML 或 Template 中设置 `<div :[dynamicAttributeName]="dynamicAttributeValue" @[event]="function"` 的形式进行设置. 接下来我们看一下的实际用法. 如下所示:</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>Index 页面</h1>
+        <div class="wins-box">
+            <div class="get-user">
+                <label for="user-name">用户名:</label>
+                <input
+                    type="text"
+                    id="user-name"
+                    :[inputAttrPlaceholder]="placeholderValue"
+                    v-model="inputText"
+                >
+            </div>
+            <div class="btn-container">
+                <button @[submitEvent]="handleSubmit">提&emsp;交</button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            inputAttrPlaceholder: "placeholder",
+            placeholderValue: "请输入姓名",
+            submitEvent: "click",
+            inputText: ""
+        }
+    },
+    methods: {
+        // 提交事件
+        handleSubmit() {
+            if (this.inputText === "") return;
+            console.log(`提交事件被触发!
+内容为: ${this.inputText}
+`);
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import './../setColor.scss';
+
+// 项目外框
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+    background-color: #333333;
+
+    // 项目标题
+    h1 {
+        flex: 1;
+        font-size: 48px;
+        margin: 20px 0;
+    }
+
+    // 分屏项目
+    .wins-box {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 80%;
+        font-size: 24px;
+
+        &>div {
+            width: 100%;
+            min-height: 48px;
+            padding: 10px;
+            box-sizing: border-box;
+
+            &:not(:last-child) {
+                margin-bottom: 20px;
+            }
+
+            // 获取用户名
+            &.get-user {
+                display: flex;
+                align-items: center;
+                width: 700px;
+
+                // 标签标题
+                label {
+                    width: 150px;
+                    font-size: 36px;
+                    margin-right: 10px;
+                }
+
+                // 输入框
+                input {
+                    width: 540px;
+                    height: 48px;
+                    font-size: 36px;
+                    padding: 10px;
+                    border: none;
+                    outline: none;
+                    background-color: #ccc;
+                    color: white;
+                    border-radius: 8px;
+                }
+            }
+
+            // 按钮容器
+            &.btn-container {
+                display: flex;
+                justify-content: center;
+                width: 700px;
+
+                // 按钮
+                button {
+                    width: 200px;
+                    height: 48px;
+                    font-size: 24px;
+                    border: none;
+                    outline: none;
+                    background-color: $bg-success-base;
+                    color: white;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    padding: 10px;
+                }
+            }
+        }
+
+    }
+}
+</style>
+```
+
+​    <b>通过将 `@[event]="function"` 事件名 或 `:[attr]="attrValue"` 动态属性 设置为活的以后可以更好地进行交互, 并便于后期维护, 如想更改 `@click => @dblclick` 由 <span style="color: #f56c6c">单击事件</span> 转换为 <span style="color: #f56c6c">双击事件</span>, 只需要对 data 数据属性中的 submitEvent 变量进行更改, 对于程序员来说更便捷高效. 需要注意的是: 在属性中属性名如果为 null 的话将会不展示该属性, 且如果在拼接属性名的过程中使用了空格则会使之报错, 如: `:['val' + 'ue']` 将会报错, 正确用法则是: `:['val'+'ue']` 在拼接属性名的时候不加空格的方式. 最终上方代码运行后的展示结果:</b> 
+
+<img src="img/bindAndEventAdvanced.png" />
 
 ## 4. Vue 进阶
 
@@ -4358,7 +4506,7 @@ export default {
 
 ```
 
-   
+<img src="img/styleBase.png" />
 
  <b>以上是基础用法, 还有进阶的用法, 操作如下:</b> 
 
@@ -4539,7 +4687,156 @@ export default {
 ​    <b>此处将对元素的类名 ( class ) 属性进行控制.</b> 
 
 ```vue
+<template>
+    <div class="index-project">
+        <h1>Index 页面</h1>
+        <div class="wins-box">
+            <!-- 基础的 class -->
+            <div class="class-base">
+                我是基础的 class 样式
+            </div>
+
+            <!-- 绑定的 class: class 类名 -->
+            <div :class="classBind">
+                我是绑定的 class 类名
+            </div>
+
+            <!-- 绑定的 class: class 与 :class -->
+            <div
+                class="font-xl"
+                :class="classBind"
+            >
+                我是 绑定的 class 类名 与 普通的 class 类名
+            </div>
+
+            <!-- 绑定的 class: class 数组 -->
+            <div :class="[weightXL, bgcGreen]">
+                我是绑定的 class 类名数组
+            </div>
+
+            <!-- 绑定的 class: class 对象 -->
+            <div :class="{ 'is-red': isRedShow }">
+                我是绑定的 class 类名对象
+            </div>
+
+            <!-- 绑定的 class: 组合 -->
+            <div
+                class="font-xl"
+                :class="[weightXL, { 'is-green': isRedShow }]"
+            >
+                我是绑定的 class 类名组合
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            classBind: 'is-red',
+            bgcGreen: 'is-green',
+            weightXL: 'weight-xl',
+            isRedShow: true
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import './../setColor.scss';
+
+// 项目外框
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+    background-color: #333333;
+
+    // 项目标题
+    h1 {
+        flex: 1;
+        font-size: 48px;
+        margin: 20px 0;
+    }
+
+    // 分屏项目
+    .wins-box {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 80%;
+        font-size: 24px;
+
+        &>div {
+            width: 100%;
+            min-height: 48px;
+            padding: 10px;
+            box-sizing: border-box;
+
+            &:not(:last-child) {
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+</style>
+
+<!-- 此处的 style 样式会对全局样式进行污染 -->
+<style lang="scss">
+@import './../setColor.scss';
+/* // todo: ========== base class START ========== */
+
+.class-base {
+    background-color: $bg-brand-base;
+}
+
+.font-xl {
+    font-size: 48px;
+}
+
+.is-red {
+    background-color: $bg-danger-base;
+}
+
+.is-green {
+    background-color: $bg-success-base;
+}
+
+.weight-xl {
+    font-weight: 600;
+}
+
+/* // ! ========== base class END ========== */
+</style>
 ```
+
+​    <b>通过以上方式都可以设置类名, 且在标签中同时有: `:class` 绑定类 和 `class` 普通类 时 Vue 将会对其进行合并处理. 并且绑定的 `class` 类名可以读取 data 属性中的变量, 尤其是变量为对象属性时对最终的渲染进行控制 ( true 则是渲染; false 则是不渲染), 数组中不仅可以书写普通的 class 类名 ( 但需要加英文状态下的引号 ), 还可以使用 对象 形式进行渲染控制 (如: `:class=['class-base', isRed, { fontSize: fontSizeShow }]`).</b> 
+
+<img src="img/classTaggle.png" />
+
+## 5. Vue 中级
+
+​    <b>本章节将对 Vue 的一些指定符号进行讲解, 如: `v-html` 和 `v-text` 以及 单次渲染的 `v-once` 指令.</b> 
+
+### A. v-html 属性
+
+​    <b>v-html 属性是 vue 中将 data 数据中的内容以 HTML 的形式展现在该属性标签内部的属性. 也就是说使用 v-html 属性的元素内部不需要写任何内容, v-html 属性会将指定的 data 数据中内容呈现在该元素的内部充当内容.</b> 
+
+```vue
+```
+
+​    <b>通过书写以上代码, 并启动项目后可以观察到浏览器展示出的效果.</b> 
+
+<img src="" />
+
+### B. v-text 属性
 
 
 
