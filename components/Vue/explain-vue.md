@@ -967,6 +967,7 @@ export default {
             <h1>拓展提高</h1>
             <p>在日语中 "手紙 [ てがみ ]" 在日语中的含义.</p>
             <p v-if="isShow">"手紙 [ てがみ ]" 在日语中的含义是: 信 Or 信件 的意思.</p>
+            <!-- 此处使用的 @ 是 v-on: 的简写形式 -->
             <button @click="isShowOpposite">{{ isShowToStr }}答案</button>
         </div>
     </div>
@@ -2052,6 +2053,80 @@ export default {
 ​    <b>通过将 `@[event]="function"` 事件名 或 `:[attr]="attrValue"` 动态属性 设置为活的以后可以更好地进行交互, 并便于后期维护, 如想更改 `@click => @dblclick` 由 <span style="color: #f56c6c">单击事件</span> 转换为 <span style="color: #f56c6c">双击事件</span>, 只需要对 data 数据属性中的 submitEvent 变量进行更改, 对于程序员来说更便捷高效. 需要注意的是: 在属性中属性名如果为 null 的话将会不展示该属性, 且如果在拼接属性名的过程中使用了空格则会使之报错, 如: `:['val' + 'ue']` 将会报错, 正确用法则是: `:['val'+'ue']` 在拼接属性名的时候不加空格的方式. 最终上方代码运行后的展示结果:</b> 
 
 <img src="img/bindAndEventAdvanced.png" />
+
+#### 5. v-on (@) 与 methods 函数 进阶
+
+​    <b>在使用 触发器 ( v-on || @ ) 和 method 函数属性时, 也可以将原生 Js ( JavaScript ) 属性作为参数, 使用 `$event` 和 `methodsFun(e)` 的方式进行获取.</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>Index 页面</h1>
+        <div
+            class="wins-box"
+            @click="getMouse($event)"
+        >
+            请点击本页面，查看控制台输出的鼠标坐标
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+        }
+    },
+    methods: {
+        getMouse(e) {
+            const oMouseX = e.clientX,
+                oMouseY = e.clientY;
+
+            console.log(`鼠标坐标：X: '${oMouseX}', Y: '${oMouseY}'`);
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import './../setColor.scss';
+
+// 项目外框
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+    background-color: #333333;
+
+    // 项目标题
+    h1 {
+        flex: 1;
+        font-size: 48px;
+        margin: 20px 0;
+    }
+
+    // 分屏项目
+    .wins-box {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        font-size: 24px;
+    }
+}</style>
+```
+
+<img src="img/methodsFunEvent.png" />
+
+<b>成功获取到原生 Js 的属性并从中得到了鼠标的坐标位置.</b> 
+
+<b>除了以上用途外, 在标签中还可以在 `v-on:` 或 `@` 中定义多个函数, 使用: `fun01(), fun02()` 的方式进行调用, 中间需要加逗号, 并使用小括号进行调用.在调用时将变量书写在前方, 将 `$event` 书写在最后面.</b>
 
 ## 4. Vue 进阶
 
@@ -4830,13 +4905,335 @@ export default {
 ​    <b>v-html 属性是 vue 中将 data 数据中的内容以 HTML 的形式展现在该属性标签内部的属性. 也就是说使用 v-html 属性的元素内部不需要写任何内容, v-html 属性会将指定的 data 数据中内容呈现在该元素的内部充当内容.</b> 
 
 ```vue
+<template>
+    <div class="index-project">
+        <h1>Index 页面</h1>
+        <div class="wins-box">
+            <section>{{ eleContent }}</section>
+            <section v-html="eleContent"></section>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            eleContent: "<div class=\"danger-container\"><h2>我是小标题</h2><div>我是一段文本内容.</div></div>"
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import './../setColor.scss';
+
+// 项目外框
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+    background-color: #333333;
+
+    // 项目标题
+    h1 {
+        flex: 1;
+        font-size: 48px;
+        margin: 20px 0;
+    }
+
+    // 分屏项目
+    .wins-box {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 80%;
+        font-size: 24px;
+
+        &>div {
+            width: 100%;
+            min-height: 48px;
+            padding: 10px;
+            box-sizing: border-box;
+
+            &:not(:last-child) {
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+</style>
+
+<!-- 此处的 style 样式会对全局样式进行污染 -->
+<style lang="scss">
+@import './../setColor.scss';
+/* // todo: ========== base class START ========== */
+
+.danger-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    color: $bg-black;
+    background-color: $bg-white;
+}
+
+/* // ! ========== base class END ========== */
+</style>
 ```
 
 ​    <b>通过书写以上代码, 并启动项目后可以观察到浏览器展示出的效果.</b> 
 
-<img src="" />
+<img src="img/vHTMLShow.png" />
+
+<b style="font-style: italic;color: #E6A23C">注意: 在某种特定条件下需要使用用户输入的内容并展示时, 需要严格对用户输入的内容进行筛选, 保证无任何的恶意代码攻击! ( 如: \<script\>\</script\> 标签等... )</b> 
 
 ### B. v-text 属性
 
+​    <b>v-html 属性是 vue 中将 data 数据中的内容以文本的形式呈现, 与直接在 HTML 或 template 元素中使用 `{{  }}` 转译大括符效果基本一致. 但需要注意的是: 在使用该属性 (`v-text`) 与上方的 `v-html` 属性时不允许再在标签内书写其他内容!</b> 
 
+```vue
+<template>
+    <div class="index-project">
+        <h1>Index 页面</h1>
+        <div class="wins-box">
+            <section>{{ eleContent }} 123</section>
+            <section v-html="eleContent"></section>
+            <section v-text="eleContent"></section>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            eleContent: "<div class=\"danger-container\"><h2>我是小标题</h2><div>我是一段文本内容.</div></div>"
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import './../setColor.scss';
+
+// 项目外框
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+    background-color: #333333;
+
+    // 项目标题
+    h1 {
+        flex: 1;
+        font-size: 48px;
+        margin: 20px 0;
+    }
+
+    // 分屏项目
+    .wins-box {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 80%;
+        font-size: 24px;
+
+        &>div {
+            width: 100%;
+            min-height: 48px;
+            padding: 10px;
+            box-sizing: border-box;
+
+            &:not(:last-child) {
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+</style>
+
+<!-- 此处的 style 样式会对全局样式进行污染 -->
+<style lang="scss">
+@import './../setColor.scss';
+/* // todo: ========== base class START ========== */
+
+.danger-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    color: $bg-black;
+    background-color: $bg-white;
+}
+
+/* // ! ========== base class END ========== */
+</style>
+```
+
+<img src="img/vTextShow.png" />
+
+### C. v-once 属性
+
+​    <b>虽然在 Vue 中是数据驱动视图, 视图会根据数据改变而改变. 但也可以使数据只驱动一次视图, 后续不再驱动. 这里需要使用 `v-once` 属性进行设置</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>Index 页面</h1>
+        <div class="wins-box">
+            <div>{{ dataBase }} 普通元素</div>
+            <div v-once>{{ dataBase }} 使用 v-once 元素</div>
+            <button v-on:click="reverseTime">更改内容</button>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            dataBase: 'current time'
+        }
+    },
+    methods: {
+        // 将 current time => future time
+        reverseTime() {
+            this.dataBase = 'future time'
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import './../setColor.scss';
+
+// 项目外框
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+    background-color: #333333;
+
+    // 项目标题
+    h1 {
+        flex: 1;
+        font-size: 48px;
+        margin: 20px 0;
+    }
+
+    // 分屏项目
+    .wins-box {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 80%;
+        font-size: 24px;
+
+        &>div {
+            width: 100%;
+            min-height: 48px;
+            padding: 10px;
+            box-sizing: border-box;
+
+            &:not(:last-child) {
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+</style>
+```
+
+<b>点击前:</b> 
+
+<img src="img/vOnce.png" />
+
+<b>点击后:</b> 
+
+<img src="img/vOnceClick.png" />
+
+​    <b>由此可见使用了 `v-once` 属性的元素虽然数据都来源于: dataBase, 但使用该属性的元素确实只会被渲染一次, 而未使用的则会随着数据变化而更新视图.</b> 
+
+ ### D. 硬件事件
+
+​    <b>在 Vue 中事件触发器可以对硬件的点击等作出反应, 如鼠标: ['鼠标移上 ( mouseover )', '鼠标移出 ( mouseout)', '鼠标点击 ( click )', '鼠标双击 ( dblclick )', ...] 以及键盘: []除了以上事件以外还有 输入事件 ( input )等...需要根据开发的实际情况按需使用.</b> 
+
+​    <b>在 Vue 中除了以上的事件处理外, Vue 还自带一套完整的且更利于开发的键盘修饰符:</b>
+
+<table style="text-align: center;">
+            <thead>
+                <tr>
+                    <th>修饰符</th>
+                    <th>含义</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>.enter</td>
+                    <td>回车按键 ( Enter )</td>
+                </tr>
+                <tr>
+                    <td>.tab</td>
+                    <td>制表键 (Tab)</td>
+                </tr>
+                <tr>
+                    <td>.delete</td>
+                    <td>删除键 ( Delete )</td>
+                </tr>
+                <tr>
+                    <td>.esc</td>
+                    <td>ESC 键 ( Esc )</td>
+                </tr>
+                <tr>
+                    <td>.space</td>
+                    <td>空格键 ( Space )</td>
+                </tr>
+                <tr>
+                    <td>.up</td>
+                    <td>上箭头键 ( Up )</td>
+                </tr>
+                <tr>
+                    <td>.down</td>
+                    <td>下箭头键 ( Down )</td>
+                </tr>
+                <tr>
+                    <td>.left</td>
+                    <td>左箭头键 ( Left )</td>
+                </tr>
+                <tr>
+                    <td>.right</td>
+                    <td>右箭头键 ( Right )</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">注意：修饰符可以组合使用，如 .enter .ctrl</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent/key/Key_Values"
+                            target="_blank">点击查看更多键盘键值</a>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
 
