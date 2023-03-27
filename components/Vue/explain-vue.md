@@ -254,6 +254,28 @@ LINE_COMMENT
         ],
         "description": "Create a new Vue @2.x scss template"
     },
+    "vue2Stylus": {
+        "prefix": "vue2Stylus",
+        "body": [
+            "<template>",
+            "    <div class=\"\">$1</div>",
+			"</template>\n",
+			"<script>",
+			"export default {",
+			"    name: '${TM_FILENAME_BASE}',",
+			"    data() {",
+			"        return {$2}",
+			"    },",
+            "    methods: {},",
+            "    computed: {},",
+            "    watch: {},",
+            "    created() {},",
+			"}",
+			"</script>\n",
+			"<style lang=\"stylus\" scoped>$3</style>"
+        ],
+        "description": "Create a new Vue @2.x stylus template"
+    },
     "vue2Ts": {
         "prefix": "vue2Ts",
         "body": [
@@ -314,6 +336,19 @@ LINE_COMMENT
         ],
         "description": "Create a new Vue @3.x scss template"
     },
+    "vue3Stylus": {
+        "prefix": "Vue3Stylus",
+        "body": [
+            "<template>",
+            "    <div class=\"\">$1</div>",
+            "</template>\n",
+            "<script setup>",
+            "import {$2} from 'vue'",
+            "</script>\n",
+            "<style lang=\"stylus\" scoped>$3</style>"
+        ],
+        "description": "Create a new Vue @3.x stylus template"
+    },
     "vue3Ts": {
         "prefix": "Vue3Ts",
         "body": [
@@ -330,7 +365,7 @@ LINE_COMMENT
 }
 ```
 
-​    <b style="color: #E6A23C">将以上代码复制到 VsCode => 用户代码片段
+​    <b style="color: #E6A23C">将以上代码复制到 VsCode => 用户代码片段 => 新建代码段 => vue.json => 粘贴 ( Ctrl + V )</b> 
 
 ### B. Auto Rename Tag
 
@@ -392,9 +427,9 @@ LINE_COMMENT
 
  ## 3. Vue 基础
 
-### 前言
+### 前言概况
 
-​    <b>在学习之前需要准备一个基础的目录结构以及项目代码</b> 
+​    <b>在学习之前需要准备一个基础的目录结构以及项目代码, 或是使用上方命令快速生成模板.</b> 
 
 <img src="./img/initVueInHTML.png" alt="初始化项目, 及项目结构" />
 
@@ -446,6 +481,120 @@ const app = Vue.createApp();
 // 这里的 app 是一个 Vue 实例, 而 #app 是一个 DOM 中 id 为 app 的元素
 app.mount('#app');
 ```
+
+#### 样式详解
+
+​    <b>Less 样式</b> 
+
+```js
+// 下载 less
+npm i less -D
+npm install --dev less 
+yarn add -D less
+
+// 但是单单靠以上样式是无法被直接解析的, 需要解释器来进行解释编译, 编译成 css 文件后才能被浏览器直接阅读
+// 下载解释器
+npm i less-loader -D
+npm install --dev less-loader
+yarn add less-loader -D
+
+// 合并下载
+npm i less less-loader -D
+yarn add less less-loader -D
+
+// 演示样式
+#app {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    
+    .father-ele {
+        // code...
+    }
+}
+
+// 参考文档: https://less.bootcss.com/
+```
+
+​    <b style="color: #E6A23C">后缀名为: `*.less`; 变量符号: `@name: value;`</b> 
+
+<b>Scss 样式</b>
+
+```js
+// 下载
+npm i sass -D
+npm install sass --dev
+yarn add sass --dev
+
+// 同理需要下载编译器进行编译, 使用:
+npm i sass-loader -D
+npm install sass-loader --dev
+yarn add sass-loader -D
+
+// 合并下载
+npm i sass sass-loader -D
+yarn add sass sass-loader -D
+
+
+// 演示样式
+#app {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    
+    .father-ele {
+        // code...
+    }
+}
+
+// 参考文档: https://www.sass.hk/docs/
+```
+
+​    <b style="color: #E6A23C">后缀名为: `*.scss`; 变量符号: `$name: value;`</b> 
+
+<b>Stylus 样式</b> 
+
+```js
+// 下载
+npm i stylus -D
+npm install stylus --dev
+yarn add stylus --dev
+
+// 同理需要下载编译器进行编译, 使用:
+npm i stylus-loader -D
+npm install stylus-loader --dev
+yarn add stylus-loader -D
+
+// 合并下载
+npm i stylus stylus-loader -D
+yarn add stylus stylus-loader -D
+
+// 演示样式 - 01
+#app {
+    width: 100%
+    height: 100vh
+    overflow: hidden
+    
+    .father-ele {
+        // code...
+    }
+}
+
+// 演示样式 - 02
+#app {
+    width 100%
+    height 100vh
+    overflow hidden
+    
+    .father-ele {
+        // code...
+    }
+}
+
+// 参考文档: https://www.stylus-lang.cn/
+```
+
+​    <b style="color: #E6A23C">后缀名为: `*.scss`; 变量符号: `$name = value` 甚至可以更偷懒省事: `name = value`</b> 
 
 ### A. data 属性
 
@@ -5236,4 +5385,3 @@ export default {
                 </tr>
             </tfoot>
         </table>
-
