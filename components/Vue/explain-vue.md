@@ -594,7 +594,7 @@ yarn add stylus stylus-loader -D
 // 参考文档: https://www.stylus-lang.cn/
 ```
 
-​    <b style="color: #E6A23C">后缀名为: `*.scss`; 变量符号: `$name = value` 甚至可以更偷懒省事: `name = value`</b> 
+​    <b style="color: #E6A23C">后缀名为: `*.styl`; 变量符号: `$name = value` 甚至可以更偷懒省事: `name = value`</b> 
 
 ### A. data 属性
 
@@ -5385,3 +5385,83 @@ export default {
                 </tr>
             </tfoot>
         </table>
+​    <b>在使用两个单词组合的按键时需要: `pageDown` => `page-down` 的形式进行展示, 例子: `@keyup.page-down=""`. </b> 
+
+<b>组合按键</b> 
+
+<table style="text-align: center;">
+            <article style="text-align: center;font-weight: 700;font-size: 24px;">组合按键</article>
+            <thead>
+                <tr>
+                    <th>修饰符</th>
+                    <th>含义</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>.ctrl</td>
+                    <td>ctrl 按键</td>
+                </tr>
+                <tr>
+                    <td>.shift</td>
+                    <td>shift 按键</td>
+                </tr>
+                <tr>
+                    <td>.alt</td>
+                    <td>alt 按键</td>
+                </tr>
+                <tr>
+                    <td>.meta</td>
+                    <td>
+                        <p>在 Mac 系统键盘上，对应 command 键 (⌘)；</p>
+                        <p>在 Windows 系统键盘上，对应 Windows 徽标键 (⊞)。</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+​    <b style="color: #f56c6c">※ 注意: `.ctrl` 和 `.shift` 以及 `.alt` 最后还有 `.meta ( Win: window 键; MacOS: Command 键 )`, 以上四种按键为组合键, 不允许单独使用, 且当需要按住 `.ctrl` 和 `.shift` + `x` 按键时, 如果末尾不设置 `.exact` 选项进行精确匹配的话, 则会发生用户只要按下包含的按键就会被触发!</b> 
+
+<b>监听鼠标</b> 
+
+<table style="text-align: center;">
+            <article style="text-align: center;font-weight: 700;font-size:24px">鼠标按键</article>
+            <thead>
+                <tr>
+                    <th>修饰符</th>
+                    <th>含义</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>.left</td>
+                    <td>鼠标左键</td>
+                </tr>
+                <tr>
+                    <td>.middle</td>
+                    <td>鼠标中键</td>
+                </tr>
+                <tr>
+                    <td>.right</td>
+                    <td>鼠标右键</td>
+                </tr>
+            </tbody>
+        </table>
+<b>使用时需要搭配鼠标事件进行合用.</b> 
+
+### E. 表单修饰符
+
+​    <b>Vue 还提供了一些对表单进行配置的修饰符:</b> 
+
+​        <b>1. `.lazy` 将 Vue 对输入框的 input ( 输入 ) 监听改为 change ( 失去焦点 )</b> 
+
+​        <b>2. `.trim` 将 Vue 表单中输入的内容进行筛选, 去除前后无效空格.</b> 
+
+​        <b>3. `.number` 将输入内容转为数字类型</b> 
+
+### F. 生命周期 ( 钩子 )
+
+​    <b>Vue 框架还提供了一组生命周期函数, 统称为生命周期钩子. 详细如下:</b> 
+
+<table style="text-align:center"><article style="text-align:center;font-weight:700;font-size:24px">生命周期 ( 钩子 )</article><thead><tr><th>序号</th><th>函数名</th><th>描述</th></tr></thead><tbody><tr><td>1</td><td>beforeCreate</td><td>beforeCreate() 钩子实在调用 app.mount() 创建 Vue 实例之后, createApp() 中的配置项生效之前被调用.</td></tr><tr><td>2</td><td>created</td><td>实例创建完成后被立即调用</td></tr><tr><td>3</td><td>beforeMount</td><td>在挂载开始之前被调用: 相关的render函数首次被调用</td></tr><tr><td>4</td><td>mounted</td><td>el被新创建的vm.$el替换, 并挂载到实例上去之后调用该钩子</td></tr><tr><td>5</td><td>beforeUpdate</td><td>数据更新时调用, 发生在虚拟DOM打补丁之前</td></tr><tr><td>6</td><td>updated</td><td>由于数据更改导致的虚拟DOM重新渲染和打补丁, 在这之后会调用beforeUpdate</td></tr><tr><td>7</td><td>beforeUnmount</td><td>实例销毁之前调用。在这一步, 实例仍然完全可用</td></tr><tr><td>8</td><td>unmounted</td><td>Vue实例销毁后调用。调用后, Vue实例指示的所有东西都会解绑定, 所有的事件监听器会被移除, 所有的子实例也会被销毁</td></tr></tbody><tfoot><tr><td colspan="3">生命周期会在 app.mount() 之后调用, 直到在调用 unmount() 后结束</td></tr></tfoot></table>
+
