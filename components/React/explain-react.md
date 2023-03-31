@@ -608,5 +608,63 @@ export default useEffectChildren
 
 ​    <b>此时发现虽然成功了...但是为什么会被卸载了? 原因是在 DOM 被修改的时候会先将原有元素组件卸载之后重新再进行渲染挂载. 所以就会看到显示 "我被卸载了" 然后又显示 "挂载 或 更新" 的字样.</b> 
 
+#### 定向监听
+
+​    <b>除了以上的监听方式, 它 ( useEffect ) 还能对指定的元素去进行监听, 如: 这里只想让它在点击 React 或 World 的按钮上去进行监听, 要怎么实现呢? 这时候就可以使用它的第二个参数了, 它的类型为数组, 内部用来存放需要监听的组件, 接下来我们开始实操, 来看以下代码:</b> 
+
+​    <b>子组件代码 ( 准备 ), 先新增一个 num 数字便于后期再进行定向监听, 此时并未给 useEffect 设置第二个参数所以点击 rep 以及新增的 num 都会触发 "挂在 或 更新" 和 "卸载" 监听函数.</b> 
+
+```jsx
+import { useState, useEffect } from 'react'
+import Styles from './index.module.styl'
+
+function useEffectChildren() {
+    const { log } = console;
+    const {
+        "Effect-children": EffectChildren
+    } = Styles;
+
+    const [rep, setRep] = useState('World!')
+    const [num, setNum] = useState(0)
+
+    useEffect(() => {
+        log('挂载 或 更新')
+
+        // 卸载调用函数
+        return () => {
+            console.log('卸载')
+        }
+    })
+
+    return (
+        <div className={EffectChildren}>
+            <h1>我是 UseEffectChildren</h1>
+            <div>
+                <p>Hello {rep}</p>
+                <button onClick={() => rep == "World!" ? setRep('React!') : setRep('World!')}>React</button>
+                <p>当前数据为: {num}</p>
+                <button onClick={() => setNum(num + 1)}>Add</button>
+            </div>
+        </div>
+    )
+}
+
+export default useEffectChildren
+
+```
+
+<img src="img/useE" />
+
+<b>此时点击两个按钮都会触发1. 卸载; 2. 更新 useEffect 函数. 接下来我们为其添加第二个参数后再次尝试 ( 这里我将新增 Add 按钮控制的参数 ( num ) 放入第二个参数的数组中 ):</b> 
+
+```jsx
+```
+
+<b>此时我们再点击</b>
+
+
+
+
+
 ## 7. React Class Life Cycle
 
