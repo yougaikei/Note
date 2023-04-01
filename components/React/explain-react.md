@@ -653,14 +653,335 @@ export default useEffectChildren
 
 ```
 
-<img src="img/useE" />
+<img src="img/useEffectDirectionalUpDate1.png" />
 
 <b>此时点击两个按钮都会触发1. 卸载; 2. 更新 useEffect 函数. 接下来我们为其添加第二个参数后再次尝试 ( 这里我将新增 Add 按钮控制的参数 ( num ) 放入第二个参数的数组中 ):</b> 
 
 ```jsx
+import { useState, useEffect } from 'react'
+import Styles from './index.module.styl'
+
+function useEffectChildren() {
+    const { log } = console;
+    const {
+        "Effect-children": EffectChildren
+    } = Styles;
+
+    const [rep, setRep] = useState('World!')
+    const [num, setNum] = useState(0)
+
+    useEffect(() => {
+        log('挂载 或 更新')
+
+        // 卸载调用函数
+        return () => {
+            console.log('我被卸载了')
+        }
+    }, [num])
+
+    return (
+        <div className={EffectChildren}>
+            <h1>我是 UseEffectChildren</h1>
+            <div>
+                <p>Hello {rep}</p>
+                <button onClick={() => rep == "World!" ? setRep('React!') : setRep('World!')}>React</button>
+                <p>当前数据为: {num}</p>
+                <button onClick={() => setNum(num + 1)}>Add</button>
+            </div>
+        </div>
+    )
+}
+
+export default useEffectChildren
+
 ```
 
-<b>此时我们再点击</b>
+<b>此时我们再点击:</b> 
+
+<img src="img/useEffectDirectionalUpDate2.png" />
+
+<img src="img/useEffectDirectionalUpDate3.png" />
+
+<img src="img/useEffectDirectionalUpDate4.png" />
+
+<b>经过上方操作以后就会发现: 它也可以对指定的内容进行监听, 如上方的 num. 只有它引起的挂载、卸载、更新才会触发该事件.</b> 
+
+### useContext
+
+​    <b>React 中 useContext 函数是一个可以传递参数的函数组件, 它内部可以有 Provider ( 用于传递上下文内容 ) 和 Consumer ( 用于消费上下文内容), 使用时需要进行引用, 此时引用的是 `createContext` 函数来创建一个新的上下文, 并对其进行解构.</b> 
+
+<b>父组件 ( .jsx )</b> 
+
+```jsx
+import { createContext } from 'react'
+import Styles from './index.module.styl'
+import UseContextChildren from './children'
+
+function UseContextTest() {
+    // 结构样式
+    const {
+        ContextContainer
+    } = Styles
+
+    return (
+        <div className={ContextContainer}>
+            <h1>useContextTest</h1>
+            <UseContextChildren />
+        </div>
+    )
+}
+
+export default UseContextTest
+```
+
+<b>父组件样式 ( .styl )</b> 
+
+```stylus
+.ContextContainer
+    display flex
+    flex-direction column
+    justify-content center
+    align-items center
+    width 100%
+    height 100vh
+
+    &>h1
+        font-size 3.2rem
+        font-weight 700
+        margin-bottom 1rem
+
+```
+
+<b>子组件 ( .jsx )</b> 
+
+```jsx
+import { createContext } from 'react'
+import Styles from './index.module.styl'
+
+function UseContextChildren() {
+    const { } = Styles
+
+    return (
+        <div>UseContextChildren</div>
+    )
+}
+
+export default UseContextChildren
+```
+
+​    <b>接下来开始使用 useContext 组件进行上下文的传递任务</b> 
+
+<b>父组件 (. jsx ):</b> 
+
+​    <b>为其添加并导出一个上下文函数 ( useContent ), 在函数外部定义一个 testContext 函数作为上下文的载体, 然后从 testContext 中将 Provider 结构出来并将参数通过该组件传递给子组件, 最后别忘记到处载体变量 ( `export { testContext }` )</b>
+
+```jsx
+import { createContext } from 'react'
+import Styles from './index.module.styl'
+import UseContextChildren from './children'
+
+// todo: 因为 const 是块级作用域, 所以需要在函数外部定义
+// 使用 createContext 创建上下文
+const testContext = createContext({})
+
+// 使用 Provider 提供上下文
+const { Provider } = testContext
+
+function UseContextTest() {
+    // 结构样式
+    const {
+        ContextContainer
+    } = Styles
+
+    return (
+        <div className={ContextContainer}>
+            <h1>useContextTest</h1>
+            <Provider value={{
+                name: 'test',
+                age: 18
+            }}>
+                <UseContextChildren />
+            </Provider>
+        </div>
+    )
+}
+
+// 到处默认组件
+export default UseContextTest
+
+// 由于子组件需要使用上下文，所以需要将上下文导出
+export { testContext }
+```
+
+<b>子组件 ( .jsx ):</b> 
+
+​    <b>此处子组件需要接收父组件传递过来的参数, 使用: `import { testContext } from '../index'` 进行导入, 并从中解构出需要的 Consumer 接收父组件 Provider 传递过来的参数.</b> 
+
+```jsx
+import { createContext } from 'react'
+import Styles from './index.module.styl'
+import { testContext } from '../index'
+
+function UseContextChildren() {
+    const { } = Styles
+
+    // 使用 Consumer 消费上下文
+    const { Consumer } = testContext
+
+    return (
+        <Consumer>
+            {
+                // 此处使用 ES6 解构语法, 从 value 中将参数取出
+                // 分别是: value.name 和 value.age
+                ({ name, age }) => {
+                    return (
+                        <>
+                            <h1>UseContextChildren</h1>
+                            <section>
+                                <p>name: {name}</p>
+                                <p>age: {age}</p>
+                            </section>
+                        </>
+                    )
+                }
+            }
+        </Consumer>
+    )
+}
+
+export default UseContextChildren
+```
+
+<img src="img/useContextPass.png" />
+
+<b>以上内容虽然可以成功传递参数, 但是组件一旦多了的话还是会很麻烦... 接下来会使用更加简洁的方式去完成以上的内容.</b> 
+
+<b>复杂的父级元素 ( .jsx ): </b> 
+
+```jsx
+import { createContext } from 'react'
+import Styles from './index.module.styl'
+import UseContextChildren from './children'
+
+// todo: 因为 const 是块级作用域, 所以需要在函数外部定义
+// 使用 createContext 创建上下文
+const TestContext = createContext({})
+const TestuseContext = createContext({})
+
+// 使用 Provider 提供上下文
+const { Provider: ProviderOne } = TestContext
+
+
+
+function UseContextTest() {
+    // 结构样式
+    const {
+        ContextContainer
+    } = Styles
+
+    return (
+        <div className={ContextContainer}>
+            <h1>useContextTest</h1>
+            {/* 第一种写法: Es6 中的结构及重名写法 */}
+            <ProviderOne value={{ name: 'test', age: 18 }}>
+                {/* 第二种写法: 使用对象形式的 变量名.提供器 = {{ 提供参数 }} 的形式 */}
+                <TestuseContext.Provider value={{ school: "xxx计算机学院" }}>
+                    <UseContextChildren />
+                </TestuseContext.Provider>
+            </ProviderOne>
+        </div>
+    )
+}
+
+// 到处默认组件
+export default UseContextTest
+
+// 由于子组件需要使用上下文，所以需要将上下文导出
+export { TestContext, TestuseContext }
+```
+
+<b>复杂的子组件 ( .jsx )</b> 
+
+```jsx
+import { createContext } from 'react'
+import Styles from './index.module.styl'
+import { TestContext, TestuseContext } from '../index'
+
+function UseContextChildren() {
+    const { } = Styles
+
+    // 使用 Consumer 消费上下文
+    const { Consumer: ConsumerOne } = TestContext
+
+    return (
+        <ConsumerOne>
+            {
+                ({ name, age }) => {
+                    return (
+                        <TestuseContext.Consumer>
+                            {
+                                ({ school }) => {
+                                    return (
+                                        <>
+                                            <h1>UseContextChildren</h1>
+                                            <section>
+                                                <p>name: {name}</p>
+                                                <p>age: {age}</p>
+                                                <p>school: {school}</p>
+                                            </section>
+                                        </>
+                                    )
+                                }
+                            }
+                        </TestuseContext.Consumer>
+                    )
+                }
+            }
+        </ConsumerOne>
+    )
+}
+
+export default UseContextChildren
+```
+
+<b>简化后的子组件 ( .jsx ):</b> 
+
+```jsx
+import { useContext } from 'react'
+import Styles from './index.module.styl'
+import { TestContext, TestuseContext } from '../index'
+
+function UseContextChildren() {
+    const { } = Styles
+
+    // 使用 useContext 获取上下文
+    // ES6 解构到处 TestContext 中的 name 以及 age
+    // 分别: TestContext.name 和 TestContext.age
+    const { name, age } = useContext(TestContext)
+
+    // 直接赋予变量名, 内部为对象 ( 对象是父级元素 createContext 中创建的. )
+    const SchoolInfo = useContext(TestuseContext)
+
+    return (
+        <>
+            <h1>UseContextChildren</h1>
+            <section>
+                {/* 使用 ES6 结构语法将内容导出 */}
+                <p>name: {name}</p>
+                <p>age: {age}</p>
+                {/* 第二种方式: 使用原始对象调用的方法 */}
+                <p>school: {SchoolInfo.school}</p>
+            </section>
+        </>
+    )
+}
+
+export default UseContextChildren
+```
+
+<img src="img/useContextPassSimple.png" />
+
+
 
 
 
