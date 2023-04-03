@@ -706,7 +706,7 @@ export default useEffectChildren
 
 <b>经过上方操作以后就会发现: 它也可以对指定的内容进行监听, 如上方的 num. 只有它引起的挂载、卸载、更新才会触发该事件.</b> 
 
-### useContext
+### C. useContext
 
 ​    <b>React 中 useContext 函数是一个可以传递参数的函数组件, 它内部可以有 Provider ( 用于传递上下文内容 ) 和 Consumer ( 用于消费上下文内容), 使用时需要进行引用, 此时引用的是 `createContext` 函数来创建一个新的上下文, 并对其进行解构.</b> 
 
@@ -768,6 +768,8 @@ function UseContextChildren() {
 
 export default UseContextChildren
 ```
+
+#### 1. 使用方式
 
 ​    <b>接下来开始使用 useContext 组件进行上下文的传递任务</b> 
 
@@ -854,9 +856,11 @@ export default UseContextChildren
 
 <img src="img/useContextPass.png" />
 
-<b>以上内容虽然可以成功传递参数, 但是组件一旦多了的话还是会很麻烦... 接下来会使用更加简洁的方式去完成以上的内容.</b> 
+#### 2. 简化书写
 
-<b>复杂的父级元素 ( .jsx ): </b> 
+​    <b>以上内容虽然可以成功传递参数, 但是组件一旦多了的话还是会很麻烦... 接下来会使用更加简洁的方式去完成以上的内容.</b> 
+
+<b>父级元素 ( .jsx ): </b> 
 
 ```jsx
 import { createContext } from 'react'
@@ -981,9 +985,275 @@ export default UseContextChildren
 
 <img src="img/useContextPassSimple.png" />
 
+​    <b>可以看到父级元素的值是可以正常的传递到子组建的. 而且使用上方简化的写法更利于后期 维护 或 更改.</b> 
+
+### D. useReducer
+
+​    <b>useReducer 是 React 中 useState 的优化, 它可以更快的完成重复性任务, 只需要传入公共的函数, 其次在传入初始值即可.</b> 
+
+<b>父组件 ( .jsx )</b>
+
+```jsx
+import { useReducer } from "react";
+import Styles from "./index.module.styl";
+import Home from "./components/Home";
+import About from "./components/About";
+
+// reducer 函数, 用于更新 state
+// 第一个参数是 state 可复用函数, 第二个参数是 action
+// 返回值是新的 state
+function reducer(state, action) {
+    switch (action) {
+        case "add":
+            return state + 1;
+        case "sub":
+            return state - 1;
+        default:
+            return state;
+    }
+}
+
+function UseReducerTest() {
+    // 解构样式
+    const {
+        ReducerContainer,
+        BtnContainer,
+    } = Styles;
+
+    // useReducer 是 React 的一个 Hook
+    // 第一个参数是 reducer 函数, 如: (state, action) => newState
+    // 第二个参数是初始值, 如: 0
+    // 返回值是一个数组, 第一个值是 state, 第二个值是 dispatch 函数
+    const [count, dispatch] = useReducer( reducer, 0 );
+    return (
+        <div className={ReducerContainer}>
+            <h1>UseReducerTest</h1>
+            <h2>Index 组件: {count}</h2>
+            <section className={BtnContainer}>
+                <button
+                    onClick={() => {
+                        if (count < 100) dispatch("add");
+                    }}
+                >
+                    add
+                </button>
+                <button
+                    onClick={() => {
+                        if (count > 0) dispatch("sub");
+                    }}
+                >
+                    sub
+                </button>
+            </section>
+            <Home />
+            <About />
+        </div>
+    );
+}
+
+export default UseReducerTest;
+
+// 导出 reducer 函数, 用于子组件复用
+export { reducer };
+
+```
+
+<b>父级样式文件 ( .styl )</b> 
+
+```stylus
+.ReducerContainer
+    display flex
+    flex-direction column
+    justify-content center
+    align-items center
+    width 100%
+    height 100vh
+
+    .BtnContainer, section
+        
+        button
+            min-width 140px
+            font-size: 24px
+            color #fff
+            background-image linear-gradient(45deg,
+                hsl(218, 100, 50),
+                hsl(187, 100, 51)
+            )
+            border none
+            outline none
+            border-radius 8px
+            padding 10px 16px
+            margin 10px
+            cursor pointer
+
+    div
+        display flex
+        flex-direction column
+        justify-content center
+        align-items center
+```
+
+<b>子组件 Home ( .jsx )</b> 
+
+```jsx
+import { useReducer } from "react";
+import { reducer } from "..";
+
+function Home() {
+    const [count, dispatch] = useReducer(reducer, 50);
+    return (
+        <div>
+            <h2>Home 组件: {count}</h2>
+            <section>
+                <button
+                    onClick={() => {
+                        if (count < 100) dispatch("add");
+                    }}
+                >
+                    add
+                </button>
+                <button
+                    onClick={() => {
+                        if (count > 0) dispatch("sub");
+                    }}
+                >
+                    sub
+                </button>
+            </section>
+        </div>
+    );
+}
+
+export default Home;
+
+```
+
+<b>子组件 About ( .jsx )</b> 
+
+```jsx
+import { useReducer } from 'react'
+import { reducer } from '..'
+
+function About() {
+    const [count, dispatch] = useReducer(reducer, 100);
+  return (
+    <div>
+            <h2>About 组件: {count}</h2>
+            <section>
+                <button
+                    onClick={() => {
+                        if (count < 100) dispatch("add");
+                    }}
+                >
+                    add
+                </button>
+                <button
+                    onClick={() => {
+                        if (count > 0) dispatch("sub");
+                    }}
+                >
+                    sub
+                </button>
+            </section>
+        </div>
+  )
+}
+
+export default About
+
+```
+
+<b>通过以上书写后, 将操作类型一致的函数进行复用, 可大幅减少重复的代码量, 否则的话以上使用 useState 会造成很多的重复且不可复用的代码:</b> 
+
+```jsx
+import { useState } from 'react'
+import Styles from './index.module.styl'
+function add( setContainer, Value) {
+    if(Value < 100) setContainer(Value + 1)
+}
+function sub( setContainer, Value) {
+    if(Value > 0) setContainer(Value - 1)
+}
+
+function Home() {
+    const [homeCount, setHomeCount] = useState(50);
+
+    return (
+        <div>
+            <h2>Home 组件: {homeCount}</h2>
+            <section>
+                <button
+                    onClick={() => add(setHomeCount, homeCount)}
+                >
+                    add
+                </button>
+                <button
+                    onClick={() => sub(setHomeCount, homeCount)}
+                >
+                    sub
+                </button>
+            </section>
+        </div>
+    )
+}
+
+function About() {
+    const [aboutCount, setAboutCount] = useState(100);
+
+    return (
+        <div>
+            <h2>About 组件: {aboutCount}</h2>
+            <section>
+                <button
+                    onClick={() => add(setAboutCount, aboutCount)}
+                >
+                    add
+                </button>
+                <button
+                    onClick={() => sub(setAboutCount, aboutCount)}
+                >
+                    sub
+                </button>
+            </section>
+        </div>
+    )
+}
 
 
+function index() {
+    const { ReducerContainer, BtnContainer } = Styles;
+    const [count, setCount] = useState(0);
+  return (
+    <div className={ReducerContainer}>
+            <h1>UseReducerTest</h1>
+            <h2>Index 组件: {count}</h2>
+            <section className={BtnContainer}>
+                <button
+                    onClick={() => add(setCount, count)}
+                >
+                    add
+                </button>
+                <button
+                    onClick={() => sub(setCount, count)}
+                >
+                    sub
+                </button>
+            </section>
+            <Home />
+            <About />
+        </div>
+  )
+}
 
+export default index
+
+```
+
+<b>虽然以上两种方式都可以完成它, 但是明显使用 useReducer 的组件更加省时省力, 且便于后期维护. 最终展示效果:</b> 
+
+<img src="img/useReducerPass.png" />
+
+### E. useCallback
 
 
 
