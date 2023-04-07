@@ -5465,6 +5465,418 @@ export default {
 
 <table style="text-align:center"><article style="text-align:center;font-weight:700;font-size:24px">生命周期 ( 钩子 )</article><thead><tr><th>序号</th><th>函数名</th><th>描述</th></tr></thead><tbody><tr><td>1.</td><td>beforeCreate</td><td>beforeCreate() 钩子会在调用 <span style="color: #f56c6c; font-weight: 700;">app.mount() 创建 Vue 实例之后, createApp() 中的配置项生效之前</span>被调用.</td></tr><tr><td>2.</td><td>created</td><td>created() 钩子会在 <span style="color: #f56c6c; font-weight: 700;">beforeCreate() 之后, createApp() 中的配置项生效之后</span>调用, 这个时候 computed 计算属性、methods 方法、watch 监听器都已经配置完成.</td></tr><tr><td>3.</td><td>beforeMount</td><td>beforeMount() 钩子会在 created() 钩子生命周期执行完成之后, 此时应用还没有挂载到 app.mount() 指定的 HTML 元素上, <span style="color: #f56c6c; font-weight: 700;">在挂在之前会调用 beforeMount() 生命周期钩子</span>, 这个时候应用还没有在页面中渲染出来.</td></tr><tr><td>4.</td><td>mounted</td><td>mounted() 钩子会<span style="color: #f56c6c; font-weight: 700;">在应用挂载到 app.mount() 指定的 HTML 元素之后执行</span>, 这个时候应用已经在页面中渲染出来了.</td></tr><tr><td>5.</td><td>beforeUpdate</td><td>beforeUpdate() 钩子会在当前应用中 <span style="color: #f56c6c; font-weight: 700;">HTML 模板需要重新渲染时</span>, 例如 data 中的属性发生变化时, 会在<span style="color: #f56c6c; font-weight: 700;">刷新之前</span>执行 beforeUpdate() 生命周期钩子.</td></tr><tr><td>6.</td><td>updated</td><td>update() 钩子会在<span style="color: #f56c6c; font-weight: 700;">数据更新之后, HTML 重新渲染完成之后</span>调用</td></tr><tr><td>7.</td><td>beforeUnmount</td><td>beforeUnmount() 会在<span style="color: #f56c6c; font-weight: 700;">应用卸载前</span>执行, 调用 app.unmount() 会卸载组件, 在正式卸载前会先执行 beforeUnmount() 生命周期钩子, 此时 Vue 应用还是正常显示的, 可以在该钩子中做一些清理收尾的操作.</td></tr><tr><td>8.</td><td>unmounted</td><td>unmounted() 生命周期会在<span style="color: #f56c6c; font-weight: 700;">应用正式卸载之后</span>调用, 此时跟应用有关的事件监听, 或指令绑定都已被卸载完成了.</td></tr></tbody><tfoot><tr><td colspan="3">生命周期会在 app.mount() 之后调用, 直到在调用 unmount() 后结束</td></tr></tfoot></table>
 
-<b>常用的一些参数</b> 
+<b>常用的一些参数:</b> 
 
 <table style="text-align:center"><article style="text-align:center;font-weight:700;font-size:24px">常用的生命周期 ( 钩子 )</article><thead><tr><th>函数名</th><th>描述</th></tr></thead><tbody><tr><td>created</td><td>最早可以访问 this 且可以修改 data 属性 或 请求远程数据的函数.</td></tr><tr><td>mounted</td><td>DOM 节点在此时已成功挂载, 此时就可以修改和访问 DOM 元素了.</td></tr></tbody></table>
+
+#### 1. 使用案例
+
+​    <b>本次案例通过 created() 生命周期, 也就是最早可以访问 this 且可以修改 data 属性 或 进行远程数据请求 的函数, 以下案例通过定义异步函数获取数据, 再使用 created() 生命周期进行调用.</b>
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>created() 钩子</h1>
+        <div
+            class="ajax-container"
+            v-for="item in getData"
+            :key="item.id"
+        >
+            <h2>{{ item.title }}</h2>
+            <p>{{ item.body }}</p>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'index',
+    data() {
+        return {
+            getData: []
+        }
+    },
+    methods: {
+        async fetchPosts() {
+            const res = await fetch('https://jsonplaceholder.typicode.com/posts')
+            const resData = await res.json()
+            this.getData = resData
+        }
+    },
+    created() {
+        this.fetchPosts()
+    },
+}
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    min-height: 100vh;
+    font-size: 1.8rem;
+    color: white;
+    background-color: #333;
+
+    .ajax-container {
+        max-width: 1200px;
+        width: 100%;
+        margin: 2rem;
+        padding: 2rem;
+        box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.5);
+
+        p {
+            margin-top: 1rem;
+            text-align: justify;
+            text-indent: 2em;
+        }
+    }
+}
+</style>
+```
+
+<b>最终样式 ( 请求后的结果 ):</b> 
+
+<img src="img/createdFunction.png" />
+
+## 6. Vue 结构
+
+​    <b>本章将对页面进行拆分, 将其组件化, 可以更好地进行复用及维护, 并且更利于团队协作.</b> 
+
+<img src="img/Template.png" />
+
+​    <b>将以上页面中的元素进行模块化就可以得到: 一个搜索框、一个图片展示框、以及三个文本条组成的文字框和下方的两个其他内容容器, 如下所示:</b> 
+
+<img src="img/Widgets.png" />
+
+​    <b>依据上方所展示的组件拆分方式可知, 本章节主要讲解 Vue 组件化 ( 定义 及 使用 )、脚手架的使用方法、父子组件之间的值传递、自定义事件的方法.</b> 
+
+### A. Vue 组件化
+
+​    <b>什么是 Vue 组件化? 如下方的链接, 在后期需要多次的书写我们就可以将其作为一个组件</b> 
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>超链接</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      a {
+        color: #000;
+        text-decoration: none;
+      }
+
+      #app {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      #app h1 {
+        font-size: 36px;
+        font-weight: 700;
+        margin: 20px 0;
+      }
+
+      #app .link-section {
+        max-width: 1200px;
+        width: 100%;
+      }
+
+      #app .link-section div {
+        display: flex;
+        flex-direction: column;
+        background-color: #dedfe0;
+        border-radius: 6px;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+
+      #app .link-section div h2 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      #app .link-section div p {
+        font-size: 18px;
+        margin-bottom: 10px;
+        text-indent: 2em;
+      }
+      #app .link-section div a {
+        display: block;
+        align-self: end;
+        font-size: 18px;
+        margin: 0 10px 10px 0;
+        background-color: #67c23a;
+        padding: 10px 20px;
+        border-radius: 6px;
+        color: white;
+        font-weight: 600;
+      }
+
+      #app .link-section div a:hover {
+        background-color: #b3e19d;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>快捷页面</h1>
+      <section class="link-section">
+        <div>
+          <h2>百度一下</h2>
+          <p>
+            百度是一个以搜索为核心的互联网公司，是全球最大的中文搜索引擎，同时也是全球最大的中文网站。
+          </p>
+          <a href="https://www.baidu.com">跳&emsp;转</a>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
+
+```
+
+​    <b>运行后就得到了一个 百度 的跳转页面, 如下</b> 
+
+<img src="img/skipToHTML.png" />
+
+​    <b>那如果我想要更多的快捷跳转则需要在 `<section>` 标签中重复书写:</b>
+
+```html
+<div>
+    <h2>百度一下</h2>
+    <p>百度是一个以搜索为核心的互联网公司，是全球最大的中文搜索引擎，同时也是全球最大的中文网站。</p>
+    <a href="https://www.baidu.com">跳&emsp;转</a>
+</div>
+```
+
+   <b>以上的方法不仅麻烦而且不利于后期维护, 接下来将使用 Vue 组件化的方式去进行书写, 以完成上方页面. 此处开始书写子组件, 在子组件中需要传递 `{ title: 标题; intro: 简介; link: 链接 }`, 具体操作如下:</b> 
+
+```vue
+<template>
+    <div class="link-list">
+        <h2>{{ title }}</h2>
+        <p>{{ intro }}</p>
+        <a :href="newLink">跳&emsp;转</a>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'LinkList',
+    data() {
+        return {
+
+        }
+    },
+    props: {
+        title: {
+            type: String,
+            default: '我是标题'
+        },
+        intro: {
+            type: String,
+            default: '我是简介'
+        },
+        link: {
+            type: String,
+            default: '我是链接'
+        }
+    },
+    computed: {
+        newLink() {
+            if (this.link.match(/^(http|https|localhost)/)) {
+                return this.link
+            } else {
+                return 'javascript:void(0)'
+            }
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.link-list {
+    display: flex;
+    flex-direction: column;
+    background-color: #dedfe0;
+    border-radius: 6px;
+    padding: 10px;
+    box-sizing: border-box;
+
+    h2 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 18px;
+        margin-bottom: 10px;
+        text-indent: 2em;
+    }
+
+    a {
+        display: block;
+        align-self: end;
+        font-size: 18px;
+        margin: 0 10px 10px 0;
+        background-color: #67c23a;
+        padding: 10px 20px;
+        border-radius: 6px;
+        color: white;
+        font-weight: 600;
+
+        &:hover {
+            background-color: #b3e19d;
+        }
+    }
+}
+</style>
+```
+
+   <b>完成一上步骤还没有万事大吉, 以为我们只创建了一个组件并未真正的去使用它, 所以接下需要在父级元素中进行调用. 打开父级 Vue 文件将上方的组件引入并在 template 中进行使用, 操作如下:</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>快捷页面</h1>
+        <section class="link-section">
+            <LinkList
+                title="百度一下"
+                intro="百度是一个以搜索为核心的互联网公司，是全球最大的中文搜索引擎，同时也是全球最大的中文网站。"
+                link="https://www.baidu.com"
+            />
+        </section>
+    </div>
+</template>
+
+<script>
+import LinkList from '@/widgets/LinkList.vue'
+export default {
+    name: 'index',
+    data() {
+        return {}
+    },
+    components: {
+        LinkList
+    },
+}
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+
+    h1 {
+        font-size: 36px;
+        font-weight: 700;
+        margin: 20px 0;
+    }
+
+    .link-section {
+        max-width: 1200px;
+        width: 100%;
+    }
+}
+</style>
+```
+
+​    <b>接下来我们运行项目后再次查看浏览器就会发现并没有什么改变, 跟上方 HTML 的效果展示一致, 但是呢...如果后期需要重复使用则需要在组件上使用 v-for 即可.</b> 
+
+#### 1. 多组数据
+
+​    <b>如上所述, 我们在 data 中定义一个 MyLink 数组变量用于存放我们的基本信息 `{ id: 序号;title: 标题; intro: 简介; link: 链接 }`, 完成后我们使用该组件并为其设置 v-for 进行循环 MyLink 中的内容, 将每一次循环的内容保存在 item 中, 接下来将使用 v-bind 绑定的方式进行数据绑定, 下方使用语法糖的方式使用 `:type="item.value"` 冒号加属性等于属性的操作将 item 中的每一项取出来, 但我们发现前方案例中取属性值时使用的是 `item.xx` item 加 点 加 属性值 的方式, 那我们这时候就可以使用 ES6 中解构的方式, 将其一一解构出来, 使用起来就会更加的便捷. 最终我们就得到了以下代码:</b> 
+
+```vue
+<template>
+    <div class="index-project">
+        <h1>快捷页面</h1>
+        <section class="link-section">
+            <LinkList
+                v-for="{ id, title, intro, link } in MyLink"
+                :title="title"
+                :intro="intro"
+                :link="link"
+                :key="id"
+            />
+        </section>
+    </div>
+</template>
+
+<script>
+import LinkList from '@/widgets/LinkList.vue'
+export default {
+    name: 'index',
+    data() {
+        return {
+            MyLink: [
+                {
+                    id: 1,
+                    title: '百度一下',
+                    intro: '百度是一个以搜索为核心的互联网公司, 是全球最大的中文搜索引擎, 同时也是全球最大的中文网站。',
+                    link: 'https://www.baidu.com'
+                },
+                {
+                    id: 2,
+                    title: '新浪微博',
+                    intro: '新浪微博是中国最大的微博社交平台, 是新浪网旗下的产品, 于2009年6月25日正式上线。',
+                    link: 'https://weibo.com'
+                }
+            ]
+        }
+    },
+    components: {
+        LinkList
+    },
+}
+</script>
+
+<style lang="scss" scoped>
+.index-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+
+    h1 {
+        font-size: 36px;
+        font-weight: 700;
+        margin: 20px 0;
+    }
+
+    .link-section {
+        max-width: 1200px;
+        width: 100%;
+    }
+}
+</style>
+```
+
+<img src="img/skipToVue.png" />
+
+### B.
