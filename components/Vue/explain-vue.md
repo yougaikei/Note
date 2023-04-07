@@ -29,6 +29,7 @@ yarn create vite // 加载完成后输入项目名后需要自行选择创建的
 ```js
 <script src="https://unpkg.com/vue@2"></script> // Vue@2.x
 <script src="https://unpkg.com/vue@3"></script> // Vue@3.x
+<script src="https://unpkg.com/next"></script> // Vue@3.x ( 推荐 )
 ```
 
 ## 2. 插件安装
@@ -5809,7 +5810,7 @@ export default {
 
 #### 1. 多组数据
 
-​    <b>如上所述, 我们在 data 中定义一个 MyLink 数组变量用于存放我们的基本信息 `{ id: 序号;title: 标题; intro: 简介; link: 链接 }`, 完成后我们使用该组件并为其设置 v-for 进行循环 MyLink 中的内容, 将每一次循环的内容保存在 item 中, 接下来将使用 v-bind 绑定的方式进行数据绑定, 下方使用语法糖的方式使用 `:type="item.value"` 冒号加属性等于属性的操作将 item 中的每一项取出来, 但我们发现前方案例中取属性值时使用的是 `item.xx` item 加 点 加 属性值 的方式, 那我们这时候就可以使用 ES6 中解构的方式, 将其一一解构出来, 使用起来就会更加的便捷. 最终我们就得到了以下代码:</b> 
+​    <b>如上所述, 我们在父组件的 data 中定义一个 MyLink 数组变量用于存放我们的基本信息 `{ id: 序号;title: 标题; intro: 简介; link: 链接 }`, 完成后我们使用该组件并为其设置 v-for 进行循环 MyLink 中的内容, 将每一次循环的内容保存在 item 中, 接下来将使用 v-bind 绑定的方式进行数据绑定, 下方使用语法糖的方式使用 `:type="item.value"` 冒号加属性等于属性的操作将 item 中的每一项取出来, 但我们发现前方案例中取属性值时使用的是 `item.xx` item 加 点 加 属性值 的方式, 那我们这时候就可以使用 ES6 中解构的方式, 将其一一解构出来, 使用起来就会更加的便捷. 最终我们就得到了以下代码:</b> 
 
 ```vue
 <template>
@@ -5879,4 +5880,164 @@ export default {
 
 <img src="img/skipToVue.png" />
 
-### B.
+#### 2. HTML 组件化
+
+​    <b>在 HTML 中引用 Vue 插件时也可以进行组件化操作, 只是与 Vue 项目中的使用方式有些出入, 在 Vue 中可以直接使用组件闭合如在书写 `<MyComponent></Mycomponent>` 时可以直接书写 `<MyComponent />` 闭合标签, 而在 HTML 模板中并不支持这种操作, 所以需要书写规范, 且在 HTML 中大小写区分能力弱, 所以建议书写小写形式的标签, 如上方的`<MyComponent></Mycomponent>` 在 HTML 中则需要修改为小写形式 `<my-component></my-component>` 的形式, 具体操作如下:</b> 
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+        http-equiv="X-UA-Compatible"
+        content="IE=edge"
+    >
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        #app .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100vh;
+            color: white;
+            background-color: #333;
+            font-size: 18px;
+        }
+
+        #app .input-container section {
+            display: flex;
+            align-items: center;
+            font-size: 36px;
+        }
+
+        #app .input-container section label {
+            margin-right: 10px;
+        }
+
+        #app .input-container section input {
+            width: 300px;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            padding: 0 10px;
+            font-size: 18px;
+            outline: none;
+            border: none;
+        }
+
+        #app .input-container p {
+            margin-top: 20px;
+            font-size: 36px;
+        }
+
+        #app .input-container p span {
+            color: #67C23A
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <my-component-a></my-component-a>
+        <my-component-b></my-component-b>
+    </div>
+    <script>
+
+        // 定义组件 -- 局部组件
+        const MyComponentB = {
+            template: `
+                <div class="input-container">
+                    <section>
+                        <label for="userInput">输入内容:</label>
+                        <input type="text" id="userInput" name="userInput" v-model="content"  />
+                    </section>
+                    <p>您一共输入了 <span>{{ inputLength }}</span> 个字符</p>
+                </div>
+            `,
+            data() {
+                return {
+                    content: ''
+                };
+            },
+            computed: {
+                inputLength() {
+                    return this.content.length;
+                }
+            }
+        };
+
+        // 创建 Vue@3 实例, 由于 const 没有声明提升, 请注意 局部组件 和 全局组件 的声明位置
+        const app = Vue.createApp({
+            components: {
+                MyComponentB
+            }
+        });
+
+        // 定义组件 -- 全局组件
+        app.component("MyComponentA",{
+            template: `
+                <div class="input-container">
+                    <section>
+                        <label for="userInput">输入内容:</label>
+                        <input type="text" id="userInput" name="userInput" v-model="content"  />
+                    </section>
+                    <p>您一共输入了 <span>{{ inputLength }}</span> 个字符</p>
+                </div>
+            `,
+            data() {
+                return {
+                    content: ''
+                };
+            },
+            computed: {
+                inputLength() {
+                    return this.content.length;
+                }
+            }
+        });
+
+        // 挂载最终的组件
+        app.mount("#app");
+    </script>
+</body>
+
+</html>
+```
+
+<img src="img/HTMLComponent.png" />
+
+### B. Props 传递
+
+​    <b>Props 是 Vue 中特有的值传递方式, 它是单向传递由父组件传递值给子组件, 且无法修改父组件传递过来的属性.</b> 
+
+```vue
+// 父组件
+
+```
+
