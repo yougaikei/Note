@@ -166,7 +166,7 @@ LINE_COMMENT
 ```json
 {
     "vue2Template": {
-		"prefix": "vue2Template",
+		"prefix": "v2t",
 		"body": [
 			"<template>",
 			"    <div class=\"\">${TM_FILENAME_BASE}</div>",
@@ -188,18 +188,18 @@ LINE_COMMENT
 		"description": "Create a new Vue @2.x base template"
 	},
     "vue2Props": {
-        "prefix": "vue2Props",
+        "prefix": "v2Props",
         "body": [
 			"<template>",
 			"    <div class=\"\">${TM_FILENAME_BASE}</div>",
 			"</template>\n",
 			"<script>",
-            "import {$1} from '$2'",
+            "import {$1} from 'vue'",
 			"export default {",
 			"    name: '${TM_FILENAME_BASE}',",
 			"    props: {},",
 			"    data() {",
-			"        return {$3}",
+			"        return {$2}",
 			"    },",
             "    methods: {},",
             "    computed: {},",
@@ -215,7 +215,7 @@ LINE_COMMENT
         "prefix": "vue2Less",
         "body": [
             "<template>",
-            "    <div class=\"\">$1</div>",
+            "    <div class=\"\">${TM_FILENAME_BASE}-project$1</div>",
 			"</template>\n",
 			"<script>",
 			"export default {",
@@ -234,10 +234,10 @@ LINE_COMMENT
         "description": "Create a new Vue @2.x less template"
     },
     "vue2Scss": {
-        "prefix": "vue2Sass",
+        "prefix": "v2Scss",
         "body": [
             "<template>",
-            "    <div class=\"\">$1</div>",
+            "    <div class=\"\">${TM_FILENAME_BASE}-project$1</div>",
 			"</template>\n",
 			"<script>",
 			"export default {",
@@ -256,10 +256,10 @@ LINE_COMMENT
         "description": "Create a new Vue @2.x scss template"
     },
     "vue2Stylus": {
-        "prefix": "vue2Stylus",
+        "prefix": "v2Stylus",
         "body": [
             "<template>",
-            "    <div class=\"\">$1</div>",
+            "    <div class=\"\">${TM_FILENAME_BASE}-project$1</div>",
 			"</template>\n",
 			"<script>",
 			"export default {",
@@ -278,7 +278,7 @@ LINE_COMMENT
         "description": "Create a new Vue @2.x stylus template"
     },
     "vue2Ts": {
-        "prefix": "vue2Ts",
+        "prefix": "v2Ts",
         "body": [
             "<template>",
 			"    <div class=\"\">${TM_FILENAME_BASE}</div>",
@@ -299,7 +299,7 @@ LINE_COMMENT
         ]
     },
     "vue3Template": {
-        "prefix": "Vue3Template",
+        "prefix": "V3Template",
         "body": [
             "<template>",
             "    <div class=\"\">${TM_FILENAME_BASE}</div>",
@@ -312,10 +312,10 @@ LINE_COMMENT
         "description": "Create a new Vue @3.x base template"
     },
     "vue3Less": {
-        "prefix": "Vue3Less",
+        "prefix": "V3Less",
         "body": [
             "<template>",
-            "    <div class=\"\">$1</div>",
+            "    <div class=\"\">${TM_FILENAME_BASE}-project$1</div>",
             "</template>\n",
             "<script setup>",
             "import {$2} from 'vue'",
@@ -325,10 +325,10 @@ LINE_COMMENT
         "description": "Create a new Vue @3.x scss template"
     },
     "vue3Scss": {
-        "prefix": "Vue3Scss",
+        "prefix": "V3Scss",
         "body": [
             "<template>",
-            "    <div class=\"\">$1</div>",
+            "    <div class=\"\">${TM_FILENAME_BASE}-project$1</div>",
             "</template>\n",
             "<script setup>",
             "import {$2} from 'vue'",
@@ -338,10 +338,10 @@ LINE_COMMENT
         "description": "Create a new Vue @3.x scss template"
     },
     "vue3Stylus": {
-        "prefix": "Vue3Stylus",
+        "prefix": "V3Stylus",
         "body": [
             "<template>",
-            "    <div class=\"\">$1</div>",
+            "    <div class=\"\">${TM_FILENAME_BASE}-project$1</div>",
             "</template>\n",
             "<script setup>",
             "import {$2} from 'vue'",
@@ -351,10 +351,10 @@ LINE_COMMENT
         "description": "Create a new Vue @3.x stylus template"
     },
     "vue3Ts": {
-        "prefix": "Vue3Ts",
+        "prefix": "V3Ts",
         "body": [
             "<template>",
-            "    <div class=\"\">$1</div>",
+            "    <div class=\"\">${TM_FILENAME_BASE}-project$1</div>",
             "</template>\n",
             "<script setup lang=\"ts\">",
             "import {$2} from 'vue'",
@@ -5556,6 +5556,107 @@ export default {
 
 ​    <b>依据上方所展示的组件拆分方式可知, 本章节主要讲解 Vue 组件化 ( 定义 及 使用 )、脚手架的使用方法、父子组件之间的值传递、自定义事件的方法.</b> 
 
+### 前言
+
+​    <b>以下内容基础样式:</b> 
+
+```scss
+@import "./setColor.scss";
+// Set the default font size to set the "rem" unit
+html {
+  font-size: 62.5%; // 1rem = 10px
+}
+
+@font-face {
+  font-family: "PingFang SC";
+  src: url('../public/fonts/PingFang.ttf');
+}
+
+* {
+  // delete default margin and padding
+  margin: 0px;
+  padding: 0px;
+  // prohibit user to select text
+  // compatible
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  // standard
+  user-select: none;
+}
+
+body {
+  font-size: 1.8rem;
+  font-family: "PingFang SC", sans-serif;
+  background-color: #F2F3F5;
+}
+
+// ul, ol list style is none
+ul, ol {
+  list-style: none;
+}
+
+// a tag style is none
+a {
+  // delete underline
+  text-decoration: none;
+}
+
+button {
+  border: none;
+  outline: none;
+  background: linear-gradient(45deg,
+    hsl(218deg, 100%, 50%),
+    hsl(187deg, 100%, 50%)
+  );
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  padding: 10px 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 10px 0;
+
+  &:hover {
+    background: linear-gradient(45deg,
+    hsl(218deg, 100%, 70%),
+    hsl(187deg, 100%, 70%)
+    );
+  }
+
+  &[data-v-type="brand"] {
+    background-image: none;
+    background-color: $bg-brand-base;
+    &:hover {
+      background-color: $bg-brand-dark;
+    }
+  }
+  &[data-v-type="success"] {
+    background-image: none;
+    background-color: $bg-success-base;
+    &:hover {
+      background-color: $bg-success-dark;
+    }
+  }
+  &[data-v-type="warning"] {
+    background-image: none;
+    background-color: $bg-warning-base;
+    &:hover {
+      background-color: $bg-warning-dark;
+    }
+  }
+  &[data-v-type="danger"] {
+    background-image: none;
+    background-color: $bg-danger-base;
+    &:hover {
+      background-color: $bg-danger-dark;
+    }
+  }
+}
+```
+
+<b>后续内容将基于该样式进行开发. 所以请务必在默认的 scss 中添加改样式, 并在 main.js 或 index.js 中进行引入. ( 如不引入则可能会导致样式与本案例教程内容样式出现分歧, 不统一的情况. )</b> 
+
 ### A. Vue 组件化
 
 ​    <b>什么是 Vue 组件化? 如下方的链接, 在后期需要多次的书写我们就可以将其作为一个组件</b> 
@@ -6324,3 +6425,676 @@ props: {
 
 ​    <b>在 Vue 中如果需要父组件向子组件中传递组件或标签, 可以使用插槽的方式进行传递. </b>
 
+<b>子组件 ( .vue )</b> 
+
+```vue
+<template>
+    <!-- 注意: 该组件为 Vue@3.x 可以书写多个组件根元素, 如使用 Vue@2.x 则需要在最外曾使用div 元素进行包裹-->
+    <div
+        class="slot-project"
+        v-show="isShow"
+    >
+        <h2>slot 组件展示</h2>
+        <div class="push-box">
+            <slot>插槽内容: 当前是插槽的默认内容, 如需修改请传入组件!</slot>
+        </div>
+        <div class="btn-box">
+            <button
+                data-v-type="danger"
+                @click="handleClick"
+            >关闭</button>
+        </div>
+    </div>
+    <div
+        class="slot-project is-close"
+        v-show="!isShow"
+    >
+        <h2>关闭提示</h2>
+        <div class="push-box">
+            <p>当前组件已关闭!</p>
+        </div>
+        <div class="btn">
+            <button @click="handleClick">开启</button>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'slotIndex',
+    data() {
+        return {
+            isShow: true
+        }
+    },
+    methods: {
+        handleClick(e) {
+            this.isShow = !this.isShow
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.slot-project {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 80rem;
+    width: 100%;
+    min-height: 28rem;
+    color: black;
+    background-color: #f2f2f2;
+    border-radius: 0.5rem;
+    overflow: hidden;
+
+    &.slot-project {
+        color: white;
+        background-color: #f0f6f6;
+
+        .push-box {
+            color: #000;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: end;
+
+            button {
+                margin: 1rem;
+            }
+        }
+    }
+
+    h2 {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        width: 100%;
+        color: #000;
+        background-color: #f2f2f2;
+    }
+
+    .push-box {
+        flex: 3;
+        padding: 0 1.5rem;
+        text-indent: 2em;
+    }
+
+    div.btn-box {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        width: 100%;
+    }
+}
+</style>
+```
+
+<b>父组件 ( .vue )</b> 
+
+```vue
+<template>
+    <div class="index-container">
+        <h1>Slot 插槽演示</h1>
+        <section class="slot-container">
+            <slotIndex></slotIndex>
+        </section>
+    </div>
+</template>
+
+<script>
+import slotIndex from '@/widgets/slotIndex.vue'
+export default {
+    name: 'index',
+    data() {
+        return {}
+    },
+    components: {
+        slotIndex
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.index-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    color: white;
+    background-color: #333;
+
+    h1 {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        width: 100%;
+        color: #000;
+        background-color: #f2f2f2;
+    }
+
+    .slot-container {
+        flex: 9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 80rem;
+        width: 100%;
+    }
+}
+</style>
+```
+
+<img src="img/SlotDemonstrate.png" />
+
+#### 1. 基础用法
+
+​    <b>经过以上操作就完成了 slot 插槽的基本框架了, 在使用插槽的时候需要使用双标签, 因为需要在两个标签之间书写需要插入的模板或内容. 具体操作如下: 父组件 ( .vue )</b> 
+
+```vue
+<template>
+    <div class="index-container">
+        <h1>Slot 插槽演示</h1>
+        <section class="slot-container">
+            <slotIndex>无可否认，当读者在浏览一个页面的排版时，难免会被可阅读的内容所分散注意力。Lorem
+                Ipsum的目的就是为了保持字母多多少少标准及平均的分配，而不是“此处有文本，此处有文本”，从而让内容更像可读的英语。如今，很多桌面排版软件以及网页编辑用Lorem Ipsum作为默认的示范文本，搜一搜“Lorem
+                Ipsum”就能找到这些网站的雏形。这些年来Lorem Ipsum演变出了各式各样的版本，有些出于偶然，有些则是故意的（刻意的幽默之类的）</slotIndex>
+        </section>
+    </div>
+</template>
+
+<script>
+import slotIndex from '@/widgets/slotIndex.vue'
+export default {
+    name: 'index',
+    data() {
+        return {}
+    },
+    components: {
+        slotIndex
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.index-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    color: white;
+    background-color: #333;
+
+    h1 {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        width: 100%;
+        color: #000;
+        background-color: #f2f2f2;
+    }
+
+    .slot-container {
+        flex: 9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 80rem;
+        width: 100%;
+    }
+}
+</style>
+```
+
+​    <b>在父容器中的 slotIndex 元素内部书写内容, 改内容将会在子容器中的 slot 插槽部分进行替换. 如下所示:</b> 
+
+<img src="img/SlotDemonstrateA.png" />
+
+#### 2. 进阶用法
+
+​    <b>经过以上可以看出插槽是可以被父元素传入的内容进行替换的, 但有时候需要的布置一个插槽. 如果需要多个的话那么就需要进阶一下了. 在子容器中的 slot 标签中书写 name 进行备注: `<slot name="title">默认内容</slot>`, 再在父容器中 `<slotTemplate></slotTemplate>` 元素上使用 v-slot 属性进行插槽绑定 `<slotTemplate><template v-slot:title></template></slotTemplate>` 通过传递模板及属性绑定就可以实现多个组件插槽展示了. 具体使用方法如下:  ( 咱们先将子容器中 slot 分别给到 title 标题 以及 content 内容 中. )</b>
+
+```vue
+<template>
+    <!-- 注意: 该组件为 Vue@3.x 可以书写多个组件根元素, 如使用 Vue@2.x 则需要在最外曾使用div 元素进行包裹-->
+    <div
+        class="slot-project"
+        v-show="isShow"
+    >
+        <h2>
+            <slot name="title">slot 组件展示</slot>
+        </h2>
+        <div class="push-box">
+            <slot name="content">插槽内容: 当前是插槽的默认内容, 如需修改请传入组件!</slot>
+        </div>
+        <div class="btn-box">
+            <button
+                data-v-type="danger"
+                @click="handleClick"
+            >关闭</button>
+        </div>
+    </div>
+    <div
+        class="slot-project is-close"
+        v-show="!isShow"
+    >
+        <h2>关闭提示</h2>
+        <div class="push-box">
+            <p>当前组件已关闭!</p>
+        </div>
+        <div class="btn">
+            <button @click="handleClick">开启</button>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'slotIndex',
+    data() {
+        return {
+            isShow: true
+        }
+    },
+    methods: {
+        handleClick(e) {
+            this.isShow = !this.isShow
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.slot-project {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 80rem;
+    width: 100%;
+    min-height: 28rem;
+    color: black;
+    background-color: #f2f2f2;
+    border-radius: 0.5rem;
+    overflow: hidden;
+
+    &.slot-project {
+        color: white;
+        background-color: #f0f6f6;
+
+        .push-box {
+            color: #000;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: end;
+
+            button {
+                margin: 1rem;
+            }
+        }
+    }
+
+    h2 {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        width: 100%;
+        color: #000;
+        background-color: #f2f2f2;
+    }
+
+    .push-box {
+        flex: 3;
+        padding: 0 1.5rem;
+        text-indent: 2em;
+    }
+
+    div.btn-box {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        width: 100%;
+    }
+}
+</style>
+```
+
+​    <b>以上为修改后的子容器 ( .vue ), 接下来我们继续修改父容器.</b> 
+
+```vue
+<template>
+    <div class="index-container">
+        <h1>Slot 插槽演示</h1>
+        <section class="slot-container">
+            <slotIndex>
+                <template v-slot:title>
+                    文章欣赏
+                </template>
+                <template v-slot:content>
+                    无可否认，当读者在浏览一个页面的排版时，难免会被可阅读的内容所分散注意力。Lorem
+                    Ipsum的目的就是为了保持字母多多少少标准及平均的分配，而不是“此处有文本，此处有文本”，从而让内容更像可读的英语。如今，很多桌面排版软件以及网页编辑用Lorem
+                    Ipsum作为默认的示范文本，搜一搜“Lorem
+                    Ipsum”就能找到这些网站的雏形。这些年来Lorem Ipsum演变出了各式各样的版本，有些出于偶然，有些则是故意的（刻意的幽默之类的）
+                </template>
+            </slotIndex>
+        </section>
+    </div>
+</template>
+
+<script>
+import slotIndex from '@/widgets/slotIndex.vue'
+export default {
+    name: 'index',
+    data() {
+        return {}
+    },
+    components: {
+        slotIndex
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.index-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    color: white;
+    background-color: #333;
+
+    h1 {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        width: 100%;
+        color: #000;
+        background-color: #f2f2f2;
+    }
+
+    .slot-container {
+        flex: 9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 80rem;
+        width: 100%;
+    }
+}
+</style>
+```
+
+​    <b>修改完成后就得到了新的模板, 这时我们启动服务器, 展示画面如下:</b> 
+
+<img src="img/SlotDemonstrateB.png" />
+
+#### 3. 语法糖
+
+​    <b>以上的方式还是比较麻烦, 所以在后期 Vue 官方在 2.6.14 版本后提供了新的语法糖. 将原先的 v-slot:xx 替换成了 #xx. 使用起来更加的简洁便利. 接下来我们将上方的父组件代码修改成语法糖的形式. 如下所示:</b> 
+
+```vue
+<template>
+    <div class="index-container">
+        <h1>Slot 插槽演示</h1>
+        <section class="slot-container">
+            <slotIndex>
+                <template #title>
+                    文章欣赏
+                </template>
+                <template #content>
+                    无可否认，当读者在浏览一个页面的排版时，难免会被可阅读的内容所分散注意力。Lorem
+                    Ipsum的目的就是为了保持字母多多少少标准及平均的分配，而不是“此处有文本，此处有文本”，从而让内容更像可读的英语。如今，很多桌面排版软件以及网页编辑用Lorem
+                    Ipsum作为默认的示范文本，搜一搜“Lorem
+                    Ipsum”就能找到这些网站的雏形。这些年来Lorem Ipsum演变出了各式各样的版本，有些出于偶然，有些则是故意的（刻意的幽默之类的）
+                </template>
+            </slotIndex>
+        </section>
+    </div>
+</template>
+
+<script>
+import slotIndex from '@/widgets/slotIndex.vue'
+export default {
+    name: 'index',
+    data() {
+        return {}
+    },
+    components: {
+        slotIndex
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.index-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    color: white;
+    background-color: #333;
+
+    h1 {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        width: 100%;
+        color: #000;
+        background-color: #f2f2f2;
+    }
+
+    .slot-container {
+        flex: 9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 80rem;
+        width: 100%;
+    }
+}
+</style>
+```
+
+​    <b>此处因为样式没变所以就不展示最终启动服务器后的图片了.</b> 
+
+### D. 子向父传递数据
+
+​    <b>此处将学习将父组件中的方法传递给子组件, 让子组件进行出发使用. 具体流程如下:</b> 
+
+<b>子组件 ( .vue )</b> 
+
+```vue
+<template>
+    <div class="children-project">
+        <section class="content-section">
+            <div>{{ blog }}</div>
+            <div>-- {{ name }}</div>
+        </section>
+        <button
+            data-v-type="danger"
+            @click="$emit('useDelete', id)"
+        >删除</button>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'childrenIndex',
+    data() {
+        return {}
+    },
+    props: {
+        id: {
+            type: Number,
+            required: true
+        },
+        name: {
+            type: String,
+            default: '张三'
+        },
+        blog: {
+            type: String,
+            default: ''
+        }
+    },
+    emits: ["useDelete"]
+}
+</script>
+
+<style lang="scss" scoped>
+.children-project {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    // 内部元素上下居中
+    align-items: center;
+    // 内部元素左右居中
+    justify-items: center;
+    min-width: 45rem;
+    height: 10rem;
+    color: #000;
+    background-color: white;
+    margin: 1rem 0;
+    border-radius: .8rem;
+
+    .content-section {
+        grid-column: 1/ span 3;
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: center;
+        width: 100%;
+        padding: 0 2rem;
+        box-sizing: border-box;
+
+        div:last-child {
+            align-self: end;
+        }
+    }
+
+    button {
+        grid-column: 4;
+        width: 10rem;
+        height: 5rem;
+        padding: 0;
+        font-weight: 500;
+        font-size: 1.7rem;
+    }
+}
+</style>
+
+```
+
+<b>父组件 ( .vue )</b> 
+
+​    <b>接下来在父容器中定义一组数据. 在组件中引入 子容器 并在创建的子元素中使用 v-for 对数据进行循环. 将子容器中定义好的事件传递给子组件, 使用 `@子组件内定义方法名="父组件的方法名"`. 代码示例如下:</b> 
+
+```vue
+<template>
+    <div class="index-container">
+        <h1>子 => 父 传递</h1>
+        <section class="children-container">
+            <childrenIndex
+                v-for="{ id, name, blog } in BlogData"
+                :id="id"
+                :name="name"
+                :blog="blog"
+                :key="id"
+                @useDelete="handleDelete"
+            />
+        </section>
+    </div>
+</template>
+
+<script>
+import childrenIndex from '@/widgets/Children.vue'
+export default {
+    name: 'index',
+    data() {
+        return {
+            BlogData: [
+                {
+                    id: 1,
+                    name: '张三',
+                    blog: '我是张三'
+                },
+                {
+                    id: 2,
+                    name: '李四',
+                    blog: '我是李四! 是个程序员'
+                },
+                {
+                    id: 3,
+                    name: '王五',
+                    blog: '王五: wangwu.com'
+                }
+            ]
+        }
+    },
+    methods: {
+        handleDelete(id) {
+            this.BlogData = this.BlogData.filter(item => item.id !== id)
+        }
+    },
+    components: {
+        childrenIndex
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.index-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    color: white;
+    background-color: #333;
+
+    h1 {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        width: 100%;
+        color: #000;
+        background-color: #f2f2f2;
+    }
+
+    .children-container {
+        flex: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 80rem;
+        width: 100%;
+    }
+}
+</style>
+```
+
+<img src="img/ChildrenPropsFun.png" />
