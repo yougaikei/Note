@@ -6034,10 +6034,293 @@ export default {
 
 ### B. Props 传递
 
-​    <b>Props 是 Vue 中特有的值传递方式, 它是单向传递由父组件传递值给子组件, 且无法修改父组件传递过来的属性.</b> 
+​    <b>Props 是 Vue 中特有的值传递方式, 它是单向传递由父组件传递值给子组件, 且无法修改父组件传递过来的属性. 在子组件中可以对接收的值类型进行设置, 如果出现父组件传递的值与预期值类型不匹配则会提出警告, 但不会报错.</b> 
+
+<b>父组件 ( .vue )</b> 
 
 ```vue
-// 父组件
+<template>
+    <div class="chat-room">
+        <h1>临时聊天室</h1>
+        <section class="say-section">
+            <MSG
+                v-for="{ id, name, msg, isShow } in chatData"
+                :key="id"
+                :name="name"
+                :msg="msg"
+                :isShow="isShow"
+            />
+        </section>
+        <section class="input-section">
+            <textarea
+                type="text"
+                v-model="msgInput"
+            ></textarea>
+            <button
+                data-v-type="brand"
+                @click="sendMsg"
+            >发送</button>
+            <button
+                data-v-type="danger"
+                @click="clearMsg"
+            >清空</button>
+        </section>
+    </div>
+</template>
+
+<script>
+import MSG from '@/widgets/msg.vue'
+export default {
+    name: 'index',
+    data() {
+        return {
+            msgInput: '',
+            chatData: [
+                {
+                    id: '2023-04-14&12:42:22',
+                    name: '张三',
+                    msg: 'Hello World!',
+                    isShow: true
+                }
+            ],
+        }
+    },
+    methods: {
+        sendMsg() {
+            if (this.msgInput) {
+                this.chatData.push({
+                    id: new Date().toLocaleString(),
+                    name: '张三',
+                    msg: this.msgInput,
+                    isShow: true
+                })
+                this.msgInput = ''
+            }
+        },
+        clearMsg() {
+            this.msg = ''
+        }
+    },
+    components: {
+        MSG
+    },
+    created() {
+        document.body.addEventListener('keydown', (e) => {
+            if (e.keyCode === 13) {
+                this.sendMsg()
+            }
+        })
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.chat-room {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+
+    h1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.4rem;
+        color: #333;
+        width: 100%;
+        height: 10%;
+    }
+
+    .say-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 74%;
+        overflow: hidden auto;
+        background-color: #2c2c2c;
+    }
+
+    .input-section {
+        display: grid;
+        width: 100%;
+        height: 16%;
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        align-items: center;
+        border-top: 2px solid #ccc;
+        box-sizing: border-box;
+
+        textarea {
+            grid-column: 1 / span 9;
+            grid-row: 1 / span 2;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            border: none;
+            border-right: 2px solid #ccc;
+            box-sizing: border-box;
+            padding: 1rem;
+            font-size: 1.8rem;
+            resize: none;
+        }
+
+        button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 14rem;
+            height: 4rem;
+            margin: 0 auto;
+            padding: 0 1rem;
+
+            &:first-child {
+                grid-column: 10;
+                grid-row: 1 / 1;
+            }
+
+            &:last-child {
+                grid-column: 10;
+                grid-row: 2 / 2;
+            }
+        }
+    }
+}
+</style>
+```
+
+<b>子组件 ( .vue )</b> 
+
+```vue
+<template>
+    <div
+        class="msg-container"
+        v-if="isShow"
+    >
+        <div class="message">{{ msg }}</div>
+        <div class="name"> --{{ name }}</div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'msgIndex',
+    props: {
+        name: String,
+        msg: String,
+        isShow: Boolean
+    },
+    data() {
+        return {}
+    },
+    methods: {},
+    computed: {},
+    watch: {},
+    created() { },
+}
+</script>
+
+<style lang="scss" scoped>
+.msg-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: white;
+    max-width: 98vw;
+    min-width: 90vw;
+    margin: 1.5rem 5vw;
+    border-radius: 0.8rem;
+
+    .message {
+        margin: 1rem;
+        padding: 1rem;
+        font-size: 2.4rem;
+    }
+
+    .name {
+        align-self: end;
+        margin: 1rem;
+    }
+}
+</style>
+```
+
+<b>完成后就可以启动服务, 如下所示:</b> 
+
+<img src="img/chatProps.png" />
+
+#### 1. 基础用法
+
+<b>Props 的基本使用方式 ( 此处将展示 name, age, isShow 三个属性, 分别为: 姓名、年龄、是否展示 ):</b> 
+
+```vue
+// 第一种方式就是使用数组进行接收, 此方式仅会接收参数, 不做任何处理 ( 参数为只读的,且不可反向传递给父元素 )
+props:[name, age, isShow]
+
+// 第二种方式就是适用对象进行接收
+// 2.0 基础用法, 直接在对象中进行属性值类型的定义, 注: 即便填写非正确项也不会报错, 但会提出警告.
+props: {
+    name: String,
+    age: Number,
+    isShow: Boolean
+}
+
+// 2.1 默认值 ( default ), 设置默认值及属性
+props: {
+    name: {
+        type: String,
+        default: 'Hello World'
+    },
+    age: {
+        type: Number,
+        default: 0
+    },
+    isShow: {
+        type: Boolean,
+        default: true
+    }
+}
+
+// 2.2 验证值 ( validator ), 虽然上方也可以接收到传递的值, 但是在年龄的位置如果用户输入负数或是其他违规年龄无法进行验证, 这时就需要使用 validator 进行值的校验
+props: {
+    name: {
+        type: String,
+        default: 'Hello World'
+    },
+    age: {
+        type: Number,
+        default: 0,
+        validator: value => value > 0
+    },
+    isShow: {
+        type: Boolean,
+        default: true
+    }
+}
+
+// 2.3 必填项 ( required ), 校验完数字后我们再来看一下姓名 ( name ) 的位置, 发送消息的用户不可以没有姓名( Or 用户名 ), 所以该项应为必填项, 这时候就可以使用 required 进行必填项的确认
+props: {
+    name: {
+        type: String,
+        required: true
+    },
+    age: {
+        type: Number,
+        default: 0,
+        validator: value => value > 0
+    },
+    isShow: {
+        type: Boolean,
+        default: true
+    }
+}
 
 ```
+
+### C. slot 插槽
+
+​    <b>在 Vue 中如果需要父组件向子组件中传递组件或标签, 可以使用插槽的方式进行传递. </b>
 
