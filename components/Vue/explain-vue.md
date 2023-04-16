@@ -5587,7 +5587,7 @@ html {
 
 body {
   font-size: 1.8rem;
-  font-family: "PingFang SC", sans-serif;
+  font-family: "PingFang SC", "Lucida Grande", sans-serif;
   background-color: #F2F3F5;
 }
 
@@ -5600,6 +5600,17 @@ ul, ol {
 a {
   // delete underline
   text-decoration: none;
+}
+
+button,
+input,
+textarea {
+  // delete outline
+  outline: none;
+  // delete border
+  border: none;
+  // delete background
+  background: none;
 }
 
 button {
@@ -6925,6 +6936,8 @@ export default {
 
 <b>子组件 ( .vue )</b> 
 
+​    <b>此处我们开始书写子组件的内容, 创建一个 Children.vue 文件, 在内部接收父组件传递的值 ( * id, name, blog ), 并将内容赋值给当前组件, 并在组件内部的末尾书写一个 button 按钮元素. 对按钮元素设置一个自定义事件, 并在 `<script>` 的返回值中进行定义, 在内部定义一个 emits 数组并在内部书写自定义事件名. 书写完成后再在 `<button></button>` 上书写 @click 事件, 使用 $emit(), 传入自定义事件名, 以及参数. 具体操作如下:</b> 
+
 ```vue
 <template>
     <div class="children-project">
@@ -7098,3 +7111,15 @@ export default {
 ```
 
 <img src="img/ChildrenPropsFun.png" />
+
+## 7. 组件深入
+
+​    <b>本章节将使用 Vue 脚手架, 对: 组件流向进行设计、监听 props 的变化、多层 props 进行传递、 teleport 传送 等...进行更加深入的组件学习.</b> 
+
+### A. 组件流向
+
+​    <b>在父组件给子组件传递 props 时, 值是从父组件流向子组件中的, 且该值为只读的. 我们来看下面的例子:</b> 
+
+```vue
+```
+
