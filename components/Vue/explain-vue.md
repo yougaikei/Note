@@ -7120,6 +7120,302 @@ export default {
 
 ​    <b>在父组件给子组件传递 props 时, 值是从父组件流向子组件中的, 且该值为只读的. 我们来看下面的例子:</b> 
 
+<b>子容器 ( children.vue )</b> 
+
 ```vue
+<template>
+    <div class="children-box">
+        <div class="children-project" v-for="({ id, name, blog }, index) in baseData" @click="handleLength(index)">
+            <section class="content-section">
+                <div>{{ blog }}</div>
+                <div>-- {{ name }}</div>
+            </section>
+            <button data-v-type="danger" @click.stop="$emit('useDelete', id)">
+                删除
+            </button>
+        </div>
+        <div class="length-box">当前是 {{ lengthNum }} 篇</div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: "childrenIndex",
+    data() {
+        return {
+            lengthNum: this.lengthCount
+        };
+    },
+    props: {
+        baseData: {
+            type: Object,
+            default: () => {},
+        },
+        lengthCount: {
+            type: Number,
+            required: true,
+        },
+    },
+    emits: ["useDelete"],
+    methods: {
+        handleLength(n) {
+            this.lengthNum = n + 1;
+        }
+    }
+
+};
+</script>
+
+<style lang="scss" scoped>
+.children-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    .length-box {
+        position: fixed;
+        right: 0;
+        bottom: 50%;
+        transform: translateY(50%);
+        width: 30%;
+        height: 5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.6rem;
+        color: #fff;
+    }
+
+    .children-project {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        // 内部元素上下居中
+        align-items: center;
+        // 内部元素左右居中
+        justify-items: center;
+        min-width: 45rem;
+        min-height: 10rem;
+        height: 10rem;
+        color: #000;
+        background-color: white;
+        margin: 1rem 0;
+        border-radius: 0.8rem;
+        cursor: pointer;
+
+        .content-section {
+            grid-column: 1 / span 3;
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0 2rem;
+            box-sizing: border-box;
+
+            div:last-child {
+                align-self: end;
+            }
+        }
+
+        button {
+            grid-column: 4;
+            width: 10rem;
+            height: 5rem;
+            padding: 0;
+            font-weight: 500;
+            font-size: 1.7rem;
+        }
+    }
+}
+</style>
+
 ```
 
+<b>父容器 ( APP.vue )</b> 
+
+```vue
+<template>
+    <div class="index-container">
+        <h1>Props 单向流</h1>
+        <section class="children-container">
+            <Children @useDelete="handleDelete" :baseData="BlogData" :lengthCount="lengthCount" />
+        </section>
+        <section class="push-box">
+            <div class="left-container">
+                <input type="text" v-model="name" ref="oInput" />
+
+                <textarea v-model="content" ref="oTextarea"></textarea>
+            </div>
+            <div class="btn-container">
+                <button @click="pushData">发送</button>
+            </div>
+        </section>
+    </div>
+</template>
+
+<script>
+import Children from "./components/Children.vue";
+export default {
+    name: "App",
+    data() {
+        return {
+            name: "",
+            content: "",
+            BlogData: [
+                {
+                    id: 1,
+                    name: "张三",
+                    blog: "我是张三",
+                },
+                {
+                    id: 2,
+                    name: "李四",
+                    blog: "我是李四! 是个程序员",
+                },
+                {
+                    id: 3,
+                    name: "王五",
+                    blog: "王五: wangwu.com",
+                },
+            ],
+            lengthCount: 0,
+        };
+    },
+    methods: {
+        handleDelete(id) {
+            this.BlogData = this.BlogData.filter(item => item.id !== id);
+        },
+        pushData() {
+            // 判断 name 和 content 是否为空 (任意一个为空都 return)
+            if (!this.name || !this.content) {
+                window.alert("数据禁止为空!");
+                return;
+            }
+            this.BlogData.push({
+                id: this.BlogData.length + 1,
+                name: this.name,
+                blog: this.content,
+            });
+            this.name = "";
+            this.content = "";
+        },
+    },
+    components: {
+        Children,
+    },
+    created() {
+      // 除了在 input 和 textarea 外点击回车, 也可以发送数据
+      document.addEventListener("keyup", e => {
+        // 获取 oInput 和 oTextarea 的焦点
+        const oInput = this.$refs.oInput;
+        const oTextarea = this.$refs.oTextarea;
+        // 判断 oInput 和 oTextarea 是否有焦点, 如果有, 则 return
+        if (oInput === document.activeElement || oTextarea === document.activeElement) {
+          return;
+        }
+
+        if (e.key === "Enter") {
+          this.pushData();
+        }
+      });
+    }
+};
+</script>
+
+<style lang="scss" scoped>
+.index-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    color: white;
+    background-color: #333;
+    overflow: hidden;
+
+    h1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        width: 100%;
+        height: 10vh;
+        color: #000;
+        background-color: #f2f2f2;
+    }
+
+    .children-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-height: 70vh;
+        height: 70vh;
+        overflow: hidden auto;
+    }
+
+    .push-box {
+        display: flex;
+        background-color: #f2f2f2;
+        width: 100%;
+        height: 20vh;
+
+        .left-container {
+            flex: 9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0 2rem;
+            box-sizing: border-box;
+
+            input {
+                width: 100%;
+                height: 3rem;
+                margin-bottom: 1rem;
+                padding: 0 1rem;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 0.8rem;
+            }
+
+            textarea {
+                width: 100%;
+                height: 10rem;
+                padding: 1rem;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 0.8rem;
+                resize: none;
+            }
+        }
+
+        .btn-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            button {
+                display: flex;
+                flex-shrink: 0;
+                align-items: center;
+                justify-content: center;
+                width: 12rem;
+                height: 6rem;
+                padding: 0;
+                border-radius: 0.8rem;
+                font-size: 2rem;
+                cursor: pointer;
+            }
+        }
+    }
+}
+</style>
+
+```
+
+<img src="img/propsFlow.png" />
