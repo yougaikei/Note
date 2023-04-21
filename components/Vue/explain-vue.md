@@ -20,6 +20,10 @@ vue create app-name
 npm create vite@latest
 // yarn 使用
 yarn create vite // 加载完成后输入项目名后需要自行选择创建的脚手架类型, 这里可以直接选择 Vue
+
+// 如果想查看编译过程可以新增一个 Vite 插件
+npm i vite-plugin-inspect -D
+yarn add vite-plugin-inspect -D
 ```
 
 ### C. Unpkg
@@ -7116,24 +7120,44 @@ export default {
 
 ​    <b>本章节将使用 Vue 脚手架, 对: 组件流向进行设计、监听 props 的变化、多层 props 进行传递、 teleport 传送 等...进行更加深入的组件学习.</b> 
 
-### A. 组件流向
+### A. Props 相应与组件刷新
 
 ​    <b>在父组件给子组件传递 props 时, 值是从父组件流向子组件中的, 且该值为只读的. 我们来看下面的例子:</b> 
 
 <b>子容器 ( children.vue )</b> 
 
 ```vue
+<!-- 定义模板 -->
 <template>
+    <!-- 定义子组件模板 -->
     <div class="children-box">
-        <div class="children-project" v-for="({ id, name, blog }, index) in baseData" @click="handleLength(index)">
+        <!-- 定义页面标签
+                v-for="({ id, name, blog }, index) in baseData" 用于循环遍历数据: 将 baseData 中的数据循环遍历出来
+                @click="handleLength(index)" 用于监听点击事件: 点击当前元素时, 执行 handleLength 方法
+        -->
+        <div
+            class="children-project"
+            v-for="({ id, name, blog }, index) in baseData"
+            @click="handleLength(index)"
+        >
+            <!-- 定义展示区域: 分别展示 blog 内容 和 name 作者 -->
             <section class="content-section">
                 <div>{{ blog }}</div>
                 <div>-- {{ name }}</div>
             </section>
-            <button data-v-type="danger" @click.stop="$emit('useDelete', id)">
+            <!-- 定义一个 button 按钮
+                    data-v-type="danger" 用于定义当前元素的类型: 危险按钮
+                    @click.stop="handleDelete(id)" 用于监听点击事件: 点击当前元素时, 执行 handleDelete 方法 ( 使用 .stop 阻止事件冒泡; 使用 $emit 触发自定义事件, 并传递参数, 此处使用的则是副组件的自定义事件)
+            -->
+            <button
+                data-v-type="danger"
+                @click.stop="$emit('useDelete', id)"
+            >
                 删除
             </button>
         </div>
+
+        <!-- 定义一个元素对当前选中的篇幅进行页数展示 -->
         <div class="length-box">当前是 {{ lengthNum }} 篇</div>
     </div>
 </template>
@@ -7149,7 +7173,7 @@ export default {
     props: {
         baseData: {
             type: Object,
-            default: () => {},
+            default: () => { },
         },
         lengthCount: {
             type: Number,
@@ -7236,19 +7260,61 @@ export default {
 <b>父容器 ( APP.vue )</b> 
 
 ```vue
+<!-- 定义模板 -->
 <template>
+    <!-- 定义父组件 -->
     <div class="index-container">
+        <!-- 定义标题 -->
         <h1>Props 单向流</h1>
-        <section class="children-container">
-            <Children @useDelete="handleDelete" :baseData="BlogData" :lengthCount="lengthCount" />
-        </section>
-        <section class="push-box">
-            <div class="left-container">
-                <input type="text" v-model="name" ref="oInput" />
 
-                <textarea v-model="content" ref="oTextarea"></textarea>
+        <!-- 定义一个子组件区域 -->
+        <section class="children-container">
+
+            <!-- 使用 Children 组件:
+                    @useDelete="handleDelete" 用于接收子组件传递过来的数据
+                    :baseData="BlogData" 用于传递数据给子组件: 将当前的数据传递给子组件
+                    :lengthCount="lengthCount" 用于传递数据给子组件: 将当前展示的页数传递给子组件
+            -->
+            <Children
+                @useDelete="handleDelete"
+                :baseData="BlogData"
+                :lengthCount="lengthCount"
+            />
+        </section>
+
+        <!-- 定义一个输入区域 -->
+        <section class="push-box">
+
+            <!-- 定义左侧输入区域 -->
+            <div class="left-container">
+
+                <!-- 定义一个 input 输入框
+                        type="text" 用于定义输入框的类型: 文本框
+                        v-model="name" 用于双向绑定数据: 将输入框的值与 name 绑定
+                        ref="oInput" 用于获取当前元素的引用: 用于获取当前元素
+                -->
+                <input
+                    type="text"
+                    v-model="name"
+                    ref="oInput"
+                />
+
+                <!-- 定义一个 textarea 文本框
+                        v-model="content" 用于双向绑定数据: 将输入框的值与 content 绑定
+                        ref="oTextarea" 用于获取当前元素的引用: 用于获取当前元素
+                -->
+                <textarea
+                    v-model="content"
+                    ref="oTextarea"
+                ></textarea>
             </div>
+
+            <!-- 定义右侧的按钮区域 -->
             <div class="btn-container">
+
+                <!-- 定义一个 button 按钮
+                        @click="pushData" 用于监听点击事件: 点击按钮时, 执行 pushData 方法
+                -->
                 <button @click="pushData">发送</button>
             </div>
         </section>
@@ -7256,13 +7322,19 @@ export default {
 </template>
 
 <script>
+// 引入 Children 组件
 import Children from "./components/Children.vue";
+
+// 定义 App 组件, 并导出
 export default {
     name: "App",
+    // 数据区域
     data() {
         return {
+            // 定义 name 和 content 数据, 用于双向绑定
             name: "",
             content: "",
+            // 定义 BlogData 数据, 用于展示
             BlogData: [
                 {
                     id: 1,
@@ -7280,46 +7352,59 @@ export default {
                     blog: "王五: wangwu.com",
                 },
             ],
+            // 定义 lengthCount 数据, 用于展示当前页数
             lengthCount: 0,
         };
     },
+    // 方法区域
     methods: {
+        // 定义 handleDelete 方法, 用于接收子组件传递过来的数据
         handleDelete(id) {
+            // 通过 id 过滤数据, 并重新赋值给 BlogData
+            // filter 方法: 用于过滤数据, 返回一个新的数组
+            // item => item.id !== id: 用于判断 item.id 是否等于 id, 如果不等于, 则返回 true, 如果等于, 则返回 false， 用于过滤删除的数据
             this.BlogData = this.BlogData.filter(item => item.id !== id);
         },
+        // 定义 pushData 方法, 用于发送数据
         pushData() {
             // 判断 name 和 content 是否为空 (任意一个为空都 return)
             if (!this.name || !this.content) {
                 window.alert("数据禁止为空!");
                 return;
             }
+            // 将 name 和 content 的数据 push 到 BlogData 中
             this.BlogData.push({
                 id: this.BlogData.length + 1,
                 name: this.name,
                 blog: this.content,
             });
+            // 清空 name 和 content 的数据, 由于使用了 v-model, 所以会自动清空页面中的 input 和 textarea 的数据
             this.name = "";
             this.content = "";
         },
     },
+    // 组件区域
     components: {
+        // 定义 Children 组件, 以下使用了简写的形式. (等同于 Children: Children) Ps: 对象名和属性名相同时, 可以简写(ES6)!
         Children,
     },
+    // created 钩子函数
     created() {
-      // 除了在 input 和 textarea 外点击回车, 也可以发送数据
-      document.addEventListener("keyup", e => {
-        // 获取 oInput 和 oTextarea 的焦点
-        const oInput = this.$refs.oInput;
-        const oTextarea = this.$refs.oTextarea;
-        // 判断 oInput 和 oTextarea 是否有焦点, 如果有, 则 return
-        if (oInput === document.activeElement || oTextarea === document.activeElement) {
-          return;
-        }
 
-        if (e.key === "Enter") {
-          this.pushData();
-        }
-      });
+        // 对全局进行监听, 用于监听键盘事件 (Enter: KeyCode 为 13)
+        document.addEventListener("keydown", e => {
+            // 判断是否按下了回车键
+            if (e.keyCode === 13) {
+                // 判断当前焦点是否在 input 或 textarea 中
+                if (
+                    document.activeElement === this.$refs.oInput ||
+                    document.activeElement === this.$refs.oTextarea
+                ) {
+                    // 如果是, 则执行 pushData 方法
+                    this.pushData();
+                }
+            }
+        });
     }
 };
 </script>
@@ -7419,3 +7504,171 @@ export default {
 ```
 
 <img src="img/propsFlow.png" />
+
+#### 1. 简化案例
+
+​    <b>本案例将会使用书页的形式进行展示. 接下来我们开始定义一个子组件子组件接收一个 blogPage 总页数 和 currentPage 当前页 为案例的基本数据. 由于 Vue 的数据流向是: 数据向下, 函数向上的原则. 所以此处重新定义一个当前页的变量 newPage. 它初始就等于父组件传递过来的默认值. 后期通过 thatPage 函数在对其进行更改.</b> 
+
+```vue
+<template>
+    <div class="children-container">
+        <section class="count-container">
+            Current page is {{ newPage }}
+        </section>
+        <section class="button-container">
+            <button
+                v-for="item in blogPage"
+                @click="thatPage(item)"
+            >{{ item }}</button>
+        </section>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'Children',
+    data() {
+        return {
+            newPage: this.currentPage
+        }
+    },
+    props: {
+        blogPage: {
+            type: Number,
+            default: 1
+        },
+        currentPage: {
+            type: Number,
+            default: 1
+        }
+    },
+    methods: {
+        thatPage(n) {
+            this.newPage = n
+        }
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+$data-v-square-btn-ref: 5rem;
+
+@function fun-v-fontSize($data) {
+    @return $data - 2.6rem;
+}
+
+.data-v-square-btn {
+    width: $data-v-square-btn-ref;
+    height: $data-v-square-btn-ref;
+    font-size: fun-v-fontSize($data-v-square-btn-ref);
+    padding: 0;
+    margin: 0;
+}
+
+.children-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 90vh;
+
+    .count-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 80%;
+        font-size: 5rem;
+    }
+
+    .button-container {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        grid-gap: 1rem;
+        width: 100%;
+        height: 20%;
+        border-top: 2px solid #000;
+        box-sizing: border-box;
+        padding: 1rem 2rem;
+        overflow-x: hidden;
+
+        button {
+            @extend .data-v-square-btn;
+        }
+    }
+}
+</style>
+```
+
+​    <b>书写完成后, 我们在 App.vue 中对子组件进行调用. 在当前组件中定义好 blogPage 博客总页数 以及 currentPage 当前页. 完成后我们引入子组件, 并在 components 中对组件进行定义, 再将定义好的组件应用到 template 模板中, 并将刚刚定义好的数据对号入座传递给子组件.</b>
+
+```vue
+<template>
+    <div class="app-container">
+        <Children
+            :blogPage="blogPage"
+            :currentPage="currentPage"
+        />
+        <div class="btn-container">
+            <button @click="addHandle">Add</button>
+        </div>
+    </div>
+</template>
+
+<script>
+import Children from './components/Children.vue'
+export default {
+    name: 'App',
+    data() {
+        return {
+            blogPage: 10,
+            currentPage: 1
+        }
+    },
+    methods: {
+        addHandle() {
+            this.blogPage += 1
+        }
+    },
+    components: {
+        Children
+    },
+}
+</script>
+
+<style lang="scss" scoped>
+.app-container {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+
+    .btn-container {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        width: 100%;
+        height: 10vh;
+        padding-right: 5rem;
+        box-sizing: border-box;
+    }
+}</style>
+```
+
+​    <b>紧接着我们使用 npm run dev 或 yarn dev 启动服务器. 就可以看到初始值 1 没有任何问题.</b> 
+
+<img src="img/PropsPageDefault.png" />
+
+​    <b>我们尝试点第 5 项, 查看是否可以成功修改当前页.</b> 
+
+<img src="img/PropsPageFirst.png" />
+
+​    <b>并没有发现任何问题, 所以以后需要修改父组件传递过来的数据时, 需要在 data 中重新定义并将其的初始参数指向传递过来的默认值.</b> 
+
+<b>通过以上也得知了:</b> 
+
+​    <b>1. 父组件发生变化, 子组件会自动刷新.</b>
+
+​    <b>2. 数据是单向传递的, 子组件不能够直接修改父组件传递过来的属性.</b> 
+
+### B. Watch 监听 Props 属性
+
